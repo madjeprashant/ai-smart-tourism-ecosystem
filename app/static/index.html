@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VoyageAI | Smart Tourism</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/styles.css" rel="stylesheet">
+  <link href="/static/step8_saved_itineraries.css" rel="stylesheet">
+  <link
+    href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css"
+    rel="stylesheet"
+  />
+  <style>
+    .explorer-map {
+      width: 100%;
+      height: 420px;
+      margin-top: 1rem;
+      border: 1px solid #e7e7e7;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f3f5f7;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#home"><span class="brand-mark">✦</span> VoyageAI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navLinks">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#planner">Trip planner</a></li>
+          <li class="nav-item"><a class="nav-link" href="#travel-explorer">Travel Explorer</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tools">Travel tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="#stories-section">Stories</a></li><li class="nav-item"><a class="nav-link" href="#saved-itineraries-section">Saved trips</a></li>
+          <li class="nav-item"><span class="nav-user" id="authStatus">Guest</span></li>
+          <li class="nav-item ms-lg-2"><button class="btn nav-cta" id="authButton" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Sign in</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">SMART TOURISM, SIMPLIFIED</p>
+          <h1>Make every trip feel<br>well planned.</h1>
+          <p>Build a personal travel guide around your destination, duration, budget and interests—all in one place.</p>
+          <div class="hero-actions"><a class="btn btn-light btn-lg" href="#planner">Plan my trip <span>→</span></a><a class="text-link" href="#tools">Explore travel tools</a></div>
+          <div class="trust-row"><span>✓ Interest-based plans</span><span>✓ Budget estimates</span><span>✓ Local places</span></div>
+        </div>
+        <aside class="hero-card" aria-label="Trip planning preview">
+          <div class="hero-card-top"><span>YOUR NEXT ESCAPE</span><span class="status-dot">● Ready</span></div>
+          <div class="hero-destination"><span class="pin">⌖</span><div><strong>Your destination</strong><small>Choose any place · 1–14 days</small></div></div>
+          <div class="mini-plan"><div><span>01</span><p><b>Tell us where you want to go</b><small>Any destination in India</small></p></div><div><span>02</span><p><b>Choose your interests</b><small>Food, nature, history and more</small></p></div><div><span>03</span><p><b>Receive your travel guide</b><small>Day-by-day suggestions</small></p></div></div>
+          <div class="hero-card-footer"><span>Your plan is created from your inputs</span><strong>✦</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="container feature-strip"><div><span class="feature-icon">⌘</span><p><b>Personal itinerary</b><small>Planned around your interests</small></p></div><div><span class="feature-icon">₹</span><p><b>Travel budget</b><small>Keep your spending visible</small></p></div><div><span class="feature-icon">✦</span><p><b>Local guidance</b><small>Find useful travel ideas</small></p></div></section>
+
+    <section class="container section-space" id="planner">
+      <div class="section-heading"><div><p class="eyebrow accent">PLAN YOUR JOURNEY</p><h2>Your trip, thoughtfully mapped out.</h2><p>Enter a few details and receive a structured day-by-day travel guide.</p></div><span class="section-step">01 / 03</span></div>
+      <div class="planner-layout">
+        <div class="planner-panel">
+          <h3>AI Trip Planner</h3><p class="muted">What does your ideal journey look like?</p>
+          <form id="plannerForm">
+            <label for="destination">Destination</label><input class="form-control" id="destination" placeholder="Enter your destination" required>
+            <div class="form-row"><div><label for="days">Number of days</label><input type="number" class="form-control" id="days" min="1" max="14" value="3" required></div><div><label for="budget">Total budget (₹)</label><input type="number" class="form-control" id="budget" min="1" value="10000" required></div></div>
+            <label for="interests">Your interests</label><input class="form-control" id="interests" placeholder="sightseeing, temples, food"><p class="field-help">Separate interests with commas. Try sightseeing or famous places, temples, nature, food, or history.</p>
+            <button class="btn btn-primary planner-button" type="submit">Generate my itinerary <span>→</span></button>
+          </form>
+        </div>
+        <div class="itinerary-panel" id="itinerary"><div class="empty-itinerary"><span class="empty-icon">✦</span><h3>Your personalised guide will appear here</h3><p>Start by choosing a destination, trip duration, budget and interests.</p><div class="empty-lines"><i></i><i></i><i></i></div></div></div>
+      </div>
+    </section>
+
+    <section class="container section-space travel-explorer-section" id="travel-explorer">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow accent">TRAVEL EXPLORER</p>
+          <h2>Explore your destination with live travel data.</h2>
+          <p>Find location details, nearby restaurants and hotels using the project's real provider and fallback system.</p>
+        </div>
+        <span class="section-step">02 / 04</span>
+      </div>
+      <article class="explorer-panel">
+        <form id="travelExplorerForm" class="explorer-form">
+          <div>
+            <label for="explorerDestination">Destination</label>
+            <input class="form-control" id="explorerDestination" placeholder="e.g. Bengaluru" minlength="2" maxlength="120" required>
+          </div>
+          <button class="btn btn-primary" id="travelExplorerButton" type="submit">Explore destination <span>→</span></button>
+        </form>
+        <div id="travelExplorerStatus" class="explorer-status" role="status" aria-live="polite">Enter a destination to explore live travel information.</div>
+        <div class="explorer-map-wrapper">
+          <div id="explorerMap" class="explorer-map" aria-label="Interactive destination map"></div>
+          <div id="explorerRoutePanel" class="explorer-route-panel" aria-live="polite"></div>
+          <button
+            type="button"
+            id="fitExplorerPlaces"
+            class="explorer-map-control"
+            aria-label="Show all places on map"
+          >
+            ◎ Show all places
+          </button>
+        </div>
+        <div id="explorerAreaNotice" class="explorer-area-notice" aria-live="polite"></div>
+        <div id="explorerRouteSummary" class="explorer-route-summary" aria-live="polite"></div>
+        <div id="travelExplorerResults" class="explorer-results" aria-live="polite">
+          <div class="explorer-empty"><span class="empty-icon">◎</span><h3>Your destination explorer will appear here</h3><p>Search for a destination to see its location, restaurants and hotels.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="container section-space" id="tools">
+      <div class="section-heading"><div><p class="eyebrow accent">TRAVEL TOOLS</p><h2>Everything you need, in one workspace.</h2></div><span class="section-step">03 / 04</span></div>
+      <div class="row g-4">
+        <div class="col-lg-12"><article class="knowledge-card"><div class="knowledge-copy"><p class="eyebrow accent">AI KNOWLEDGE BASE</p><h3>Upload tourism information for smarter answers.</h3><p>Add your own destination guides, hotel notes, local recommendations or travel documents. LangChain splits the content, FAISS finds relevant information and Gemini generates a grounded response.</p><div class="ai-flow"><span>Upload document</span><b>→</b><span>LangChain</span><b>→</b><span>FAISS</span><b>→</b><span>Gemini</span><b>→</b><span>Personalised answer</span></div></div><form id="knowledgeForm" class="upload-form"><label class="upload-box" for="knowledgeFile"><span class="upload-icon">↑</span><strong>Upload tourism knowledge</strong><small>TXT, MD, CSV, PDF or DOCX · Maximum 8 MB</small><input id="knowledgeFile" type="file" accept=".txt,.md,.csv,.pdf,.docx" required></label><button class="btn btn-primary" type="submit">Add to AI knowledge base</button><p id="uploadStatus" class="upload-status">Checking Gemini configuration...</p></form></article></div>
+        <div class="col-lg-6"><article class="tool-card"><div class="tool-icon blue">₹</div><div><h3>Expense tracker</h3><p>Record expenses as you travel and keep an eye on your trip total.</p></div><form id="expenseForm" class="expense-form"><input id="expenseTitle" class="form-control" placeholder="Expense name" required><input id="expenseAmount" type="number" min="1" class="form-control" placeholder="Amount (₹)" required><button class="btn btn-primary">Add expense</button></form><div id="expenseList" class="expense-list"></div></article></div>
+        <div class="col-lg-6"><article class="tool-card"><div class="tool-icon mint">✦</div><div><h3>Travel assistant</h3><p>Sign in to ask the protected AI assistant. Answers show their knowledge source.</p></div><form id="chatForm" class="assistant-form"><input id="question" class="form-control" placeholder="What should I know before visiting?" required><button class="btn btn-primary">Ask</button></form><div id="chatAnswer" class="answer">Sign in, then ask a practical travel question.</div></article></div>
+      </div>
+    </section>
+
+    <section class="container section-space saved-section" id="saved-itineraries-section">
+      <div class="section-heading"><div><p class="eyebrow accent">YOUR TRAVEL COLLECTION</p><h2>Saved itineraries.</h2><p>Keep your generated trips in one place and reopen them whenever you need.</p></div><span class="section-step">02 / 03</span></div>
+      <div id="savedItineraries" class="saved-itineraries-grid">
+        <div class="saved-empty"><span class="empty-icon">♡</span><h3>Your saved trips will appear here</h3><p>Sign in and save an itinerary to keep it for later.</p></div>
+      </div>
+    </section>
+
+    <section class="container section-space" id="stories-section"><div class="stories-head"><div><p class="eyebrow accent">FROM THE COMMUNITY</p><h2>Stories worth taking with you.</h2><p>Practical tips and experiences shared by fellow travellers.</p></div><button id="shareStoryButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#storyModal">Share your story <span>→</span></button></div><div id="stories" class="row g-3 mt-1"></div></section>
+  </main>
+
+  <footer><div class="container"><a class="navbar-brand" href="#home"><span class="brand-mark">✦</span> VoyageAI</a><p>AI Smart Tourism Ecosystem · Plan with confidence, travel with curiosity.</p></div></footer>
+  <div class="modal fade" id="loginModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><form id="loginForm" class="modal-content"><div class="modal-header"><div><h5 class="mb-0">Sign in to VoyageAI</h5><small class="text-muted">Your JWT keeps protected features secure.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label" for="loginEmail">Username or email</label><input id="loginEmail" type="text" class="form-control mb-3" placeholder="Username or email" required><label class="form-label" for="loginPassword">Password</label><input id="loginPassword" type="password" class="form-control" required><p id="loginMessage" class="login-message mt-3 mb-0"></p></div><div class="modal-footer d-flex justify-content-between align-items-center"><button type="button" class="btn btn-link p-0" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">New user? Register</button><button class="btn btn-primary" type="submit">Sign in securely</button></div></form></div></div>
+  <div class="modal fade" id="registerModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><form id="registerForm" class="modal-content"><div class="modal-header"><div><h5 class="mb-0">Create your VoyageAI account</h5><small class="text-muted">Register once, then sign in with your username or email.</small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label" for="registerUsername">Username</label><input id="registerUsername" class="form-control mb-3" minlength="3" maxlength="50" placeholder="e.g. prashant123" required><label class="form-label" for="registerName">Full name</label><input id="registerName" class="form-control mb-3" minlength="3" maxlength="100" required><label class="form-label" for="registerEmail">Email</label><input id="registerEmail" type="email" class="form-control mb-3" required><label class="form-label" for="registerPhone">Phone</label><input id="registerPhone" type="tel" class="form-control mb-3" minlength="10" maxlength="15" required><label class="form-label" for="registerPassword">Password</label><input id="registerPassword" type="password" class="form-control mb-3" minlength="8" required><label class="form-label" for="registerConfirmPassword">Confirm password</label><input id="registerConfirmPassword" type="password" class="form-control" minlength="8" required><p id="registerMessage" class="login-message mt-3 mb-0"></p></div><div class="modal-footer"><button class="btn btn-primary" type="submit">Create account</button></div></form></div></div>
+
+  <div class="modal fade" id="storyModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><form id="storyForm" class="modal-content"><div class="modal-header"><h5>Share your travel story</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input id="author" class="form-control mb-3" placeholder="Your name" required><input id="storyDestination" class="form-control mb-3" placeholder="Destination" required><input id="storyTitle" class="form-control mb-3" placeholder="Story title" required><textarea id="storyContent" class="form-control" rows="5" placeholder="Share a useful travel tip..." required></textarea><label class="media-picker mt-3" for="storyMedia"><span>＋</span><strong>Add a travel memory</strong><small>Multiple images, audio, or video · up to 10 files · 25 MB each</small><input id="storyMedia" type="file" accept="image/*,audio/*,video/*" multiple></label><div id="mediaPreview" class="media-preview"></div><p id="storyUploadStatus" class="upload-status"></p></div><div class="modal-footer"><button class="btn btn-primary">Publish story</button></div></form></div></div>
+  <link
+    href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css"
+    rel="stylesheet"
+/>
+<script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

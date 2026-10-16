@@ -1,0 +1,823 @@
+html{scroll-padding-top:7rem}
+:root{--ink:#10233d;--blue:#2563d9;--mist:#f5f7fb;--line:#e1e7f0;--muted:#6e7b90;--mint:#dff6ee}*{box-sizing:border-box}body{background:var(--mist);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.navbar{background:#10233d;padding:.8rem 0}.navbar-brand{font-size:1.17rem;font-weight:800;color:#fff!important;letter-spacing:-.03em}.brand-mark{color:#79dbc0;margin-right:.3rem}.nav-link{color:#c8d4e7!important;font-size:.92rem}.nav-cta{background:#fff;color:#10233d;border-radius:7px;font-weight:700;font-size:.88rem;padding:.5rem .85rem}.hero{background:radial-gradient(circle at 78% 18%,#387bc6 0,transparent 27%),linear-gradient(125deg,#0c2341 0%,#124a82 62%,#1d7186 100%);color:#fff}.hero-grid{min-height:485px;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;gap:4rem}.hero-copy h1{font-size:clamp(2.7rem,5.4vw,4.8rem);letter-spacing:-.065em;line-height:1.02;font-weight:800;margin:.45rem 0 1.2rem}.hero-copy>p:not(.eyebrow){font-size:1.1rem;line-height:1.7;max-width:620px;color:#d7e4f1}.eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.15em;margin:0;color:#c4dff4}.eyebrow.accent{color:#2563d9}.hero-actions{display:flex;align-items:center;gap:1.3rem;margin-top:1.9rem}.hero-actions .btn{font-weight:750;color:#10233d;padding:.72rem 1rem}.hero-actions .btn span,.planner-button span,.stories-head button span{margin-left:.55rem}.text-link{color:#fff;font-size:.9rem;font-weight:700;text-decoration:none}.trust-row{display:flex;gap:1.1rem;flex-wrap:wrap;margin-top:2.4rem;font-size:.8rem;color:#d5e6f5}.hero-card{background:#fff;color:var(--ink);border-radius:15px;padding:1.35rem;box-shadow:0 28px 60px #06142455}.hero-card-top,.hero-card-footer{display:flex;justify-content:space-between;font-size:.69rem;letter-spacing:.08em;font-weight:800;color:#728196}.status-dot{color:#0d9a68;letter-spacing:0}.hero-destination{display:flex;gap:.8rem;align-items:center;margin:1.45rem 0}.pin{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;color:#2563d9;background:#eaf1ff;font-size:1.45rem}.hero-destination strong,.hero-destination small{display:block}.hero-destination strong{font-size:1.15rem}.hero-destination small{font-size:.76rem;color:var(--muted)}.mini-plan{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.55rem 0}.mini-plan>div{display:flex;gap:.75rem;padding:.65rem 0}.mini-plan span{color:#2563d9;font-weight:800;font-size:.75rem}.mini-plan p{margin:0}.mini-plan b,.mini-plan small{display:block}.mini-plan b{font-size:.84rem}.mini-plan small{font-size:.72rem;color:var(--muted)}.hero-card-footer{padding-top:1rem;align-items:center}.hero-card-footer strong{font-size:1.05rem;color:var(--ink);letter-spacing:0}.feature-strip{display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:-38px;position:relative;box-shadow:0 10px 30px #11264c0e}.feature-strip>div{display:flex;gap:.8rem;align-items:center;padding:1.1rem 1.3rem;border-right:1px solid var(--line)}.feature-strip>div:last-child{border:0}.feature-icon{display:grid;place-items:center;width:35px;height:35px;background:#edf3ff;color:#2563d9;border-radius:9px;font-weight:800}.feature-strip p{margin:0}.feature-strip b,.feature-strip small{display:block}.feature-strip b{font-size:.85rem}.feature-strip small{font-size:.73rem;color:var(--muted)}.section-space{margin-top:6.2rem;margin-bottom:6.2rem}.section-heading,.stories-head{display:flex;justify-content:space-between;gap:1.5rem;align-items:start;margin-bottom:2rem}.section-heading h2,.stories-head h2{font-size:clamp(1.8rem,3vw,2.55rem);font-weight:800;letter-spacing:-.045em;margin:.35rem 0 .45rem}.section-heading p:not(.eyebrow),.stories-head p:not(.eyebrow){margin:0;color:var(--muted)}.section-step{font-size:.75rem;font-weight:750;color:#77869c;white-space:nowrap;padding-top:.3rem}.planner-layout{display:grid;grid-template-columns:minmax(290px,.75fr) 1.25fr;gap:1.4rem}.planner-panel,.itinerary-panel,.tool-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px #17335b0a}.planner-panel{padding:1.65rem}.planner-panel h3,.tool-card h3{font-size:1.15rem;font-weight:800;margin:0 0 .25rem}.muted{color:var(--muted);font-size:.88rem;margin-bottom:1.45rem}.planner-panel label{display:block;font-size:.8rem;font-weight:750;margin:.95rem 0 .4rem}.form-control{border-color:#d9e1eb;padding:.65rem .75rem;font-size:.9rem;border-radius:7px}.form-control:focus{border-color:#2563d9;box-shadow:0 0 0 .2rem #2563d921}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}.field-help{font-size:.73rem;color:var(--muted);margin:.45rem 0 1.15rem}.btn-primary{background:#2563d9;border-color:#2563d9;font-weight:700}.planner-button{width:100%;padding:.68rem}.itinerary-panel{min-height:430px;padding:1.65rem}.empty-itinerary{text-align:center;max-width:350px;margin:78px auto}.empty-icon{display:grid;place-items:center;margin:0 auto 1rem;width:48px;height:48px;border-radius:14px;background:#edf3ff;color:#2563d9;font-size:1.3rem}.empty-itinerary h3{font-size:1.12rem;font-weight:800}.empty-itinerary p{color:var(--muted);font-size:.88rem;line-height:1.55}.empty-lines{margin:1.5rem auto;width:215px}.empty-lines i{display:block;height:7px;background:#edf1f6;border-radius:9px;margin:.65rem auto}.empty-lines i:nth-child(2){width:78%}.empty-lines i:nth-child(3){width:62%}.tool-card{height:100%;padding:1.45rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;align-content:start}.tool-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800}.tool-icon.blue{color:#2563d9;background:#eaf1ff}.tool-icon.mint{color:#078259;background:#def6ed}.tool-card p{font-size:.84rem;color:var(--muted);margin:.35rem 0 1rem}.expense-form,.assistant-form{grid-column:1/-1;display:grid;gap:.65rem;margin-top:.5rem}.expense-form{grid-template-columns:1.2fr 1fr auto}.assistant-form{grid-template-columns:1fr auto}.expense-list{grid-column:1/-1;margin-top:1rem;color:#3f5065;font-size:.86rem}.answer{grid-column:1/-1;background:#f0f6ff;border:1px solid #dfeafb;border-radius:8px;padding:.8rem .9rem;font-size:.86rem;color:#405267;margin-top:.8rem}.stories-head{align-items:center}.btn-outline-primary{border-color:#2563d9;color:#2563d9;font-weight:700}.story{border:1px solid var(--line);border-radius:12px;padding:1.15rem;height:auto;background:#fff}.story h5{font-weight:800}.story p{color:#526477;font-size:.88rem}footer{background:#10233d;padding:2rem 0;color:#bdcbe0}footer p{margin:.55rem 0 0;font-size:.8rem}@media(max-width:991px){.hero-grid{grid-template-columns:1fr;gap:2.5rem;padding:4rem 1rem}.hero-card{max-width:450px}.planner-layout{grid-template-columns:1fr}.feature-strip{margin-top:1.2rem}.section-space{margin-top:4rem;margin-bottom:4rem}}@media(max-width:600px){.hero-grid{min-height:0}.hero-copy h1{font-size:2.8rem}.hero-actions,.trust-row{gap:.8rem}.feature-strip{grid-template-columns:1fr}.feature-strip>div{border-right:0;border-bottom:1px solid var(--line)}.feature-strip>div:last-child{border-bottom:0}.section-heading,.stories-head{display:block}.section-step{display:block;margin-top:1rem}.form-row,.expense-form,.assistant-form{grid-template-columns:1fr}.stories-head .btn{margin-top:1rem;width:100%}.itinerary-panel{padding:1rem}.empty-itinerary{margin:50px auto}}
+.itinerary-intro{padding-bottom:1rem;border-bottom:1px solid var(--line)}.itinerary-intro h2{font-size:1.4rem;font-weight:800;margin:.35rem 0}.trip-day{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:1.2rem 0}.day-header{display:flex;justify-content:space-between;gap:1rem;padding:1rem;background:#f0f6ff;border-left:4px solid #3f9ab4}.day-header span,.guide-time{color:#2563d9;font-size:.7rem;font-weight:800;letter-spacing:.1em}.day-header h3{font-size:1rem;font-weight:800;margin:.2rem 0 0}.day-header strong{font-size:.9rem;white-space:nowrap}.day-header small{display:block;color:var(--muted);font-size:.68rem;font-weight:500}.guide-section{padding:1rem;border-top:1px solid var(--line)}.guide-heading{display:flex;justify-content:space-between;gap:.75rem}.guide-section h4{font-size:.95rem;font-weight:800;margin:.2rem 0}.guide-section p{font-size:.84rem;color:#4e6074;margin:.35rem 0 .65rem}.guide-details{display:flex;flex-wrap:wrap;gap:.35rem .8rem;font-size:.72rem;color:var(--muted)}.guide-badge{font-size:.68rem;font-weight:800;color:#087548;background:#dff6eb;border-radius:30px;padding:.22rem .45rem;white-space:nowrap}.planner-tips{background:#f0f8f4;border-radius:10px;padding:1rem}.planner-tips h3{font-size:.95rem;font-weight:800}.planner-tips ul{margin:0;padding-left:1.2rem;color:#4e6074;font-size:.8rem}@media(max-width:600px){.day-header{display:block}.day-header strong{display:block;margin-top:.5rem}}
+.knowledge-card{background:linear-gradient(110deg,#f6f9ff,#effbf7);border:1px solid #dce8f1;border-radius:14px;padding:1.55rem;display:grid;grid-template-columns:1.15fr .85fr;gap:1.7rem;align-items:center}.knowledge-card h3{font-size:1.24rem;font-weight:800;margin:.35rem 0 .55rem}.knowledge-copy>p:not(.eyebrow){font-size:.87rem;line-height:1.6;color:#526477;margin:0}.ai-flow{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.ai-flow span{font-size:.7rem;font-weight:750;background:#fff;border:1px solid #d9e5ef;border-radius:30px;padding:.35rem .55rem}.ai-flow b{color:#2563d9}.upload-form{display:grid;gap:.7rem}.upload-box{border:1.5px dashed #8dadd8;border-radius:10px;padding:1.2rem;text-align:center;background:#fff;cursor:pointer}.upload-box:hover{border-color:#2563d9;background:#f9fbff}.upload-box span,.upload-box strong,.upload-box small{display:block}.upload-icon{font-size:1.35rem;color:#2563d9;font-weight:800}.upload-box strong{font-size:.88rem;margin:.3rem 0}.upload-box small,.upload-status{font-size:.73rem;color:var(--muted)}.upload-box input{display:none}.upload-status{margin:0}.upload-status.success{color:#087548}.upload-status.error{color:#ba3737}@media(max-width:991px){.knowledge-card{grid-template-columns:1fr}}
+.answer-sources{display:block;margin-top:.55rem;color:#64758a;font-weight:700}
+.nav-user{display:block;color:#c8d4e7;font-size:.8rem;padding:.5rem}.login-message{font-size:.85rem}.login-message.error{color:#b42318}.login-message.success{color:#087548}
+.media-picker{display:block;border:1.5px dashed #9bb4da;border-radius:8px;padding:.75rem;text-align:center;cursor:pointer}.media-picker:hover{background:#f7faff;border-color:#2563d9}.media-picker span,.media-picker strong,.media-picker small{display:block}.media-picker span{font-size:1.2rem;color:#2563d9;font-weight:800}.media-picker strong{font-size:.84rem}.media-picker small{font-size:.72rem;color:var(--muted)}.media-picker input{display:none}.media-preview{margin-top:.7rem}.media-preview img,.media-preview video{display:block;max-width:100%;max-height:180px;border-radius:8px}.media-preview audio{width:100%}
+.story-media{display:block;width:100%;max-height:190px;object-fit:cover;border-radius:8px;margin:.65rem 0}
+.visit-time{color:#167250!important;font-size:.78rem!important;font-weight:750;margin:.35rem 0 .55rem!important}
+
+.media-preview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}.media-preview img,.media-preview video{width:100%;height:150px;object-fit:cover}.media-preview audio{grid-column:1/-1}.story-media{margin:.65rem 0}
+
+
+/* Travel Assistant answer/source polish */
+.answer{line-height:1.65;min-width:0}
+.answer-text{width:100%;overflow-wrap:anywhere}
+.answer-text p{margin:0 0 .8rem}
+.answer-text p:last-child{margin-bottom:0}
+.answer-text h4{font-size:.96rem;font-weight:800;color:#17345b;margin:1rem 0 .45rem}
+.answer-text h4:first-child{margin-top:0}
+.answer-text ul{margin:.35rem 0 .9rem;padding-left:1.2rem}
+.answer-text li{margin:.35rem 0}
+.answer-text strong{color:#102b4d}
+.answer-gap{height:.35rem}
+.answer-loading{display:flex;align-items:center;gap:.55rem;color:#60728a}
+.answer-loading-dot{width:8px;height:8px;border-radius:50%;background:#2563d9;animation:assistantPulse 1s infinite ease-in-out}
+@keyframes assistantPulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+.answer-source{grid-column:1/-1;display:block;margin-top:.65rem;padding:.62rem .72rem;background:#fff;border:1px solid #dce5ef;border-radius:9px;color:#526477}
+.answer-source[hidden]{display:none!important}
+.assistant-source-main{display:flex;align-items:center;gap:.45rem;min-width:0}
+.assistant-source-icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px;font-size:.85rem}
+.assistant-source-main strong{color:#213754;font-size:.74rem;white-space:nowrap}
+.assistant-source-main small{color:#64758a;font-size:.68rem;line-height:1.4}
+.assistant-source-details{display:flex;flex-wrap:wrap;gap:.3rem;margin:.45rem 0 0 27px}
+.assistant-source-details span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.64rem;color:#728196;background:#f6f8fb;border-radius:5px;padding:.18rem .35rem}
+.source-web_travel{border-color:#cfe2f7;background:#f8fbff}
+.source-global_travel{border-color:#d9e0ea;background:#fafbfc}
+.source-none{border-color:#e6e0d6;background:#fffdf8}
+@media(max-width:600px){.assistant-source-main{align-items:flex-start;flex-wrap:wrap}.assistant-source-main small{flex-basis:100%;margin-left:27px}.assistant-source-details{margin-left:0}}
+
+
+/* Step 7 — Live weather card. Kept consistent with the existing tool-card UI. */
+.weather-card{grid-template-columns:auto 1fr;align-items:start}
+.tool-icon.weather{color:#2563d9;background:#eaf1ff}
+.weather-form{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:.65rem;margin-top:.45rem}
+.weather-result{grid-column:1/-1;margin-top:1rem;border:1px solid var(--line);border-radius:10px;background:#f7faff;padding:1rem}
+.weather-empty,.weather-error{font-size:.82rem;color:var(--muted);padding:.35rem 0}
+.weather-error{color:#b42318}
+.weather-current{display:grid;grid-template-columns:1.2fr auto 1fr;gap:1rem;align-items:center}
+.weather-place h4{font-size:1.05rem;font-weight:800;margin:.15rem 0 .1rem;color:#17345b}
+.weather-place small{font-size:.72rem;color:var(--muted)}
+.weather-temperature{display:grid;grid-template-columns:auto auto;align-items:center;column-gap:.45rem;justify-items:center}
+.weather-temperature span{font-size:1.7rem;grid-row:1/3}
+.weather-temperature strong{font-size:1.35rem;font-weight:800;color:#17345b;line-height:1}
+.weather-temperature small{font-size:.7rem;color:var(--muted);white-space:nowrap}
+.weather-stats{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.4rem .7rem}
+.weather-stats span{font-size:.7rem;color:var(--muted);background:#fff;border:1px solid #dfe7f0;border-radius:20px;padding:.3rem .5rem}
+.weather-stats b{color:#17345b}
+.weather-forecast{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1rem}
+.weather-day{background:#fff;border:1px solid #dfe7f0;border-radius:8px;padding:.7rem;display:grid;gap:.2rem;text-align:center}
+.weather-day strong{font-size:.72rem;color:#17345b}
+.weather-day-icon{font-size:1.25rem;margin:.15rem 0}
+.weather-day>span:not(.weather-day-icon){font-size:.78rem;font-weight:750;color:#2563d9}
+.weather-day small{font-size:.66rem;color:var(--muted)}
+.weather-source{display:block;margin-top:.7rem;color:#77869c;font-size:.65rem}
+@media(max-width:991px){.weather-current{grid-template-columns:1fr auto}.weather-stats{grid-column:1/-1;justify-content:flex-start}}
+@media(max-width:600px){.weather-form{grid-template-columns:1fr}.weather-current{grid-template-columns:1fr}.weather-temperature{justify-content:start;justify-items:start}.weather-stats{justify-content:flex-start}.weather-forecast{grid-template-columns:1fr}.weather-day{grid-template-columns:1fr auto;align-items:center;text-align:left}.weather-day-icon{grid-column:2;grid-row:1/4}.weather-day>span:not(.weather-day-icon){grid-column:1}}
+
+
+/* STEP 20 - PHASE 4: Travel Explorer */
+.travel-explorer-section {
+  scroll-margin-top: 6.5rem;
+}
+.travel-explorer-section .explorer-panel {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e7e7e7);
+  border-radius: 22px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+.explorer-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+}
+.explorer-form label {
+  display: block;
+  margin-bottom: .45rem;
+  font-weight: 600;
+}
+.explorer-form button {
+  min-height: 44px;
+  white-space: nowrap;
+}
+.explorer-status {
+  margin-top: 1rem;
+  min-height: 1.5rem;
+  color: #6c757d;
+  font-size: .92rem;
+}
+.explorer-status.loading { color: #0d6efd; }
+.explorer-status.error { color: #b42318; }
+.explorer-status.success { color: #18794e; }
+.explorer-results {
+  margin-top: 1rem;
+}
+.explorer-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  border: 1px dashed #d8d8d8;
+  border-radius: 16px;
+}
+.explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.explorer-card {
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  padding: 1.15rem;
+  background: #fff;
+  min-width: 0;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+.explorer-card h3 {
+  margin: 0 0 .9rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid #eef1f5;
+  font-size: 1.05rem;
+}
+.explorer-card h4 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.explorer-meta {
+  color: #6c757d;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+.explorer-card--destination .explorer-destination-name {
+  font-size: 1.15rem;
+}
+.explorer-card--destination .explorer-destination-details {
+  margin-top: .75rem;
+}
+.explorer-list {
+  display: grid;
+  gap: 0;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: .35rem;
+  flex: 1;
+  min-height: 0;
+}
+.explorer-item {
+  padding: .85rem 0;
+  border-top: 1px solid #eee;
+}
+.explorer-item:first-child {
+  padding-top: .1rem;
+  border-top: 0;
+}
+.explorer-item h4 {
+  margin-bottom: .2rem;
+}
+.explorer-badge {
+  display: inline-block;
+  margin-top: .45rem;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #0d6efd;
+  font-size: .75rem;
+}
+.explorer-provider {
+  margin-top: auto;
+  padding: .7rem .8rem;
+  border-radius: 10px;
+  background: #f7f7f7;
+  font-size: .82rem;
+}
+.explorer-card .explorer-provider + .explorer-provider {
+  margin-top: .5rem;
+}
+.explorer-error {
+  padding: .75rem;
+  border-radius: 10px;
+  background: #fff1f0;
+  color: #b42318;
+  font-size: .9rem;
+}
+@media (max-width: 900px) {
+  .explorer-grid { grid-template-columns: 1fr; }
+  .explorer-card { min-height: 0; }
+}
+@media (max-width: 600px) {
+  .explorer-form { grid-template-columns: 1fr; }
+  .explorer-form button { width: 100%; }
+}
+
+
+/* STEP 12 — MapLibre destination map */
+.explorer-map {
+  width: 100%;
+  height: 420px;
+  min-height: 420px;
+  margin-top: 1rem;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #eef1f4;
+}
+
+.explorer-map-message {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+  font-size: .9rem;
+  background: #f5f6f7;
+}
+
+.explorer-map .maplibregl-canvas {
+  outline: none;
+}
+
+.explorer-map .maplibregl-ctrl-group {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .explorer-map {
+    height: 320px;
+    min-height: 320px;
+  }
+}
+
+
+/* STEP 13 — Interactive Travel Explorer place markers */
+.explorer-map {
+  position: relative;
+}
+
+.explorer-map-legend {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .7rem;
+  padding: .55rem .7rem;
+  border: 1px solid rgba(16, 35, 61, .12);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 5px 16px rgba(16, 35, 61, .12);
+  backdrop-filter: blur(4px);
+}
+
+.explorer-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  color: #42536a;
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+.explorer-legend-marker {
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.explorer-legend-marker.destination { background: #2563d9; }
+.explorer-legend-marker.restaurant { background: #e85d04; }
+.explorer-legend-marker.hotel { background: #2a9d8f; }
+
+.explorer-popup {
+  min-width: 170px;
+  max-width: 260px;
+  color: #10233d;
+}
+
+.explorer-popup strong {
+  display: block;
+  margin-top: .18rem;
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+.explorer-popup-type {
+  color: #2563d9;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.explorer-popup-address {
+  margin-top: .35rem;
+  color: #66758a;
+  font-size: .68rem;
+  line-height: 1.4;
+}
+
+.explorer-popup-source {
+  margin-top: .35rem;
+  color: #8793a4;
+  font-size: .62rem;
+}
+
+@media (max-width: 600px) {
+  .explorer-map-legend {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+}
+
+
+/* STEP 14 — Map ↔ list interaction */
+.explorer-item {
+  cursor: pointer;
+  transition: background-color .18s ease, box-shadow .18s ease;
+}
+
+.explorer-item:hover {
+  background: #f8fbff;
+}
+
+.explorer-item:focus-visible {
+  outline: 2px solid #2563d9;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.explorer-item.is-map-active {
+  background: #eef5ff;
+  box-shadow: inset 3px 0 0 #2563d9;
+}
+
+.explorer-map-link {
+  color: #2563d9;
+  font-size: .68rem;
+  font-weight: 750;
+}
+
+.explorer-item:hover .explorer-map-link,
+.explorer-item.is-map-active .explorer-map-link {
+  text-decoration: underline;
+}
+
+/* STEP 15 — selected-place details */
+.explorer-popup--details {
+  min-width: 220px;
+  max-width: 310px;
+  color: #10233d;
+}
+
+.explorer-popup-title {
+  display: block;
+  margin-top: .22rem;
+  font-size: .92rem;
+  line-height: 1.35;
+}
+
+.explorer-popup-details {
+  display: grid;
+  gap: .42rem;
+  margin-top: .55rem;
+}
+
+.explorer-popup-row {
+  display: grid;
+  gap: .08rem;
+}
+
+.explorer-popup-row span {
+  color: #7b8798;
+  font-size: .61rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.explorer-popup-row strong,
+.explorer-popup-row a {
+  color: #263b55;
+  font-size: .69rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.explorer-popup-row a {
+  color: #2563d9;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.explorer-popup-row a:hover {
+  text-decoration: underline;
+}
+
+
+/* STEP 16 — Route visualization */
+.explorer-route-button {
+  width: 100%;
+  margin-top: .65rem;
+  padding: .5rem .65rem;
+  border: 0;
+  border-radius: 8px;
+  background: #2563d9;
+  color: #fff;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+.explorer-route-button:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+}
+
+.explorer-route-button:focus-visible {
+  outline: 2px solid #2563d9;
+  outline-offset: 2px;
+}
+
+
+/* STEP 17 — Route mode selection */
+.explorer-route-controls {
+  display: grid;
+  gap: .42rem;
+  margin-top: .7rem;
+}
+
+.explorer-route-label {
+  color: #7b8798;
+  font-size: .61rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.explorer-route-mode {
+  width: 100%;
+  min-height: 32px;
+  padding: .35rem .5rem;
+  border: 1px solid #d9e1ec;
+  border-radius: 7px;
+  background: #fff;
+  color: #263b55;
+  font: inherit;
+  font-size: .68rem;
+  cursor: pointer;
+}
+
+.explorer-route-mode:focus-visible {
+  outline: 2px solid #2563d9;
+  outline-offset: 1px;
+}
+
+.explorer-route-button {
+  margin-top: .05rem;
+}
+
+
+/* STEP 18 — Route summary and clear route */
+.explorer-route-summary {
+  display: none;
+  margin-top: .75rem;
+}
+
+.explorer-route-summary.is-visible {
+  display: block;
+}
+
+.explorer-route-summary-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: .8rem;
+  align-items: center;
+  padding: .8rem 1rem;
+  border: 1px solid #dbe4f0;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.explorer-route-summary-card > div {
+  display: grid;
+  gap: .08rem;
+}
+
+.explorer-route-summary-label,
+.explorer-route-stat span {
+  color: #7b8798;
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.explorer-route-summary-card strong {
+  color: #263b55;
+  font-size: .72rem;
+}
+
+.explorer-route-stat {
+  min-width: 90px;
+}
+
+.explorer-clear-route {
+  padding: .45rem .7rem;
+  border: 1px solid #cbd7e6;
+  border-radius: 7px;
+  background: #fff;
+  color: #263b55;
+  font: inherit;
+  font-size: .66rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.explorer-clear-route:hover {
+  background: #f1f5f9;
+}
+
+@media (max-width: 760px) {
+  .explorer-route-summary-card {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* STEP 19 — Map fit-all control */
+.explorer-map-wrapper {
+  position: relative;
+}
+
+.explorer-map-control {
+  position: absolute;
+  top: .75rem;
+  left: .75rem;
+  z-index: 5;
+  padding: .45rem .7rem;
+  border: 1px solid rgba(203, 215, 230, .95);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .96);
+  color: #263b55;
+  box-shadow: 0 2px 8px rgba(15, 35, 61, .12);
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 750;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.explorer-map-control:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.explorer-map-control:focus-visible {
+  outline: 2px solid #2563d9;
+  outline-offset: 2px;
+}
+
+
+/* STEP 19 FIX — only one place popup is active at a time */
+.explorer-map .maplibregl-popup {
+  z-index: 20;
+}
+
+
+/* STEP 19 FIX — list-to-map viewport */
+.explorer-map-wrapper {
+  scroll-margin-top: 6rem;
+}
+
+
+/* STEP 19 FINAL — popup viewport protection */
+.explorer-map-wrapper {
+  scroll-margin-top: 5.5rem;
+}
+
+
+/* STEP 19 FINAL — route controls viewport */
+.explorer-map .maplibregl-popup-content {
+  max-height: calc(100% - 12px);
+}
+
+
+
+/* STEP 20 FINAL — area-search guidance stays outside the map overlay */
+.explorer-area-notice {
+  display: none;
+  margin-top: .75rem;
+  padding: .75rem .9rem;
+  border: 1px solid rgba(203, 215, 230, .95);
+  border-radius: 11px;
+  background: #f7faff;
+  box-shadow: 0 2px 8px rgba(15, 35, 61, .06);
+}
+
+.explorer-area-notice.is-visible {
+  display: block;
+}
+
+.explorer-area-notice__content {
+  display: grid;
+  gap: .25rem;
+  color: #52657a;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.explorer-area-notice__content > div {
+  display: flex;
+  align-items: baseline;
+  gap: .45rem;
+  min-width: 0;
+}
+
+.explorer-area-notice__content strong {
+  color: #263b55;
+}
+
+.explorer-area-notice__content p {
+  margin: 0;
+}
+
+.explorer-area-notice__content em {
+  font-style: normal;
+  font-weight: 600;
+  color: #263b55;
+}
+
+/* STEP 19 FINAL3 — route controls outside popup */
+.explorer-route-panel {
+  position: absolute;
+  right: .75rem;
+  bottom: .75rem;
+  z-index: 25;
+  display: none;
+  width: min(360px, calc(100% - 1.5rem));
+  max-width: 360px;
+}
+
+.explorer-route-panel.is-visible {
+  display: block;
+}
+
+.explorer-route-panel .explorer-route-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .7rem;
+  align-items: end;
+  padding: .7rem .8rem;
+  border: 1px solid rgba(203, 215, 230, .95);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 5px 18px rgba(15, 35, 61, .18);
+  backdrop-filter: blur(5px);
+}
+
+.explorer-route-panel-place {
+  display: grid;
+  min-width: 0;
+  gap: .1rem;
+}
+
+.explorer-route-panel-place strong {
+  overflow: hidden;
+  color: #263b55;
+  font-size: .72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.explorer-route-controls--message {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+
+.explorer-route-panel-message {
+  display: grid;
+  gap: .2rem;
+  color: #52657a;
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
+.explorer-route-panel-message strong {
+  color: #263b55;
+  font-size: .74rem;
+}
+
+.explorer-route-panel-message em {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.explorer-route-panel-action {
+  display: grid;
+  grid-template-columns: 115px auto;
+  gap: .4rem;
+  align-items: end;
+}
+
+.explorer-route-panel-action .explorer-route-label {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.explorer-route-panel-action .explorer-route-mode {
+  min-width: 115px;
+}
+
+.explorer-route-panel-action .explorer-route-button {
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .explorer-route-panel {
+    left: .75rem;
+    right: .75rem;
+    width: auto;
+    max-width: none;
+  }
+
+  .explorer-route-panel .explorer-route-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .explorer-route-panel-action {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.explorer-scope-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.35rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: rgba(37, 99, 217, 0.1);
+  color: #1d4ed8;
+}
+
+.explorer-destination-formatted {
+  margin-top: 0.45rem;
+}
+
+
+/* Reference-inspired, chronological day-by-day itinerary timeline */
+.day-schedule {
+  position: relative;
+  display: grid;
+  gap: 0;
+  padding: .45rem 0 .25rem;
+}
+.schedule-event {
+  display: grid;
+  grid-template-columns: 118px 28px minmax(0, 1fr);
+  gap: .65rem;
+  align-items: start;
+  padding: .6rem .15rem;
+  border-bottom: 1px solid rgba(120, 140, 160, .16);
+}
+.schedule-time {
+  padding-top: .15rem;
+  color: var(--bs-secondary-color, #64748b);
+  font-size: .82rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.schedule-marker {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: rgba(43, 111, 210, .1);
+  font-size: .85rem;
+}
+.schedule-event--meal .schedule-marker { background: rgba(220, 143, 40, .14); }
+.schedule-event--rest .schedule-marker { background: rgba(100, 116, 139, .14); }
+.schedule-copy { min-width: 0; }
+.schedule-copy h4 { margin: 0 0 .22rem; font-size: .96rem; font-weight: 700; }
+.schedule-copy p { margin: 0; color: var(--bs-secondary-color, #64748b); font-size: .86rem; line-height: 1.5; }
+.schedule-meta { display: flex; flex-wrap: wrap; gap: .35rem .75rem; margin-top: .35rem; color: var(--bs-secondary-color, #64748b); font-size: .74rem; }
+.schedule-disclaimer { margin: .75rem .15rem 0; color: var(--bs-secondary-color, #64748b); font-size: .75rem; line-height: 1.45; }
+.trip-day { overflow: hidden; }
+.itinerary-intro { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+.itinerary-intro-main { min-width:0; }
+.trip-estimate { flex:0 0 auto; display:grid; gap:.2rem; text-align:right; padding:.7rem .9rem; border:1px solid #cfe2f1; border-radius:10px; background:#f0f8ff; }
+.trip-estimate span { color:#58728c; font-size:.65rem; font-weight:800; letter-spacing:.09em; }
+.trip-estimate strong { color:#10233d; font-size:1.2rem; }
+.trip-estimate small { color:#6e7b90; font-size:.68rem; }
+@media (max-width: 600px) {
+  .itinerary-intro { flex-direction:column; }
+  .trip-estimate { width:100%; text-align:left; }
+  .schedule-event { grid-template-columns: 1fr; gap: .3rem; padding: .7rem 0; }
+  .schedule-time { font-size: .78rem; }
+  .schedule-marker { display: none; }
+}

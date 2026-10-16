@@ -1,0 +1,78 @@
+data/tourism_knowledge/
+data/faiss_index/
+app/static/uploads/
+.env
+
+# Local runtime artifacts
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.db
+app/data/provider_usage.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Test/cache/coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+.cache/
+
+# IDE / editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build/package output
+build/
+dist/
+*.egg-info/
+
+# Local runtime data
+app/data/*.json
+
+# Node/frontend dependencies if present
+node_modules/
+
+# Backups
+*BACKUP*
+*backup*
+*.bak
+
+# Archives
+*.zip
+*.rar
+*.7z
