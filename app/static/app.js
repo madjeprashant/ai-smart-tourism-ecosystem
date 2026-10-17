@@ -2,11 +2,8 @@ const TOKEN_KEY = "voyageai_jwt";
 const USER_KEY = "voyageai_email";
 const byId = id => document.getElementById(id);
 
-// Start a fresh authentication session whenever the main application page loads.
-// This intentionally prevents a previous account from being restored after refresh.
-localStorage.removeItem(TOKEN_KEY);
-localStorage.removeItem(USER_KEY);
-
+// Keep the authenticated session across page refreshes. Sign-out and invalid-token
+// responses explicitly clear the session; a page load must not silently sign out.
 const clearAuthSession = () => {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
@@ -1010,8 +1007,26 @@ const renderExplorerMap = (destination, coordinates, restaurantsResult, hotelsRe
 
   explorerMap.addControl(new maplibregl.NavigationControl(), "top-right");
 
+  // MapLibre can initialize while the explorer section is hidden or its layout
+  // is changing (for example after closing the sign-in modal). Recalculate its
+  // canvas after the container becomes visible and whenever its dimensions change.
+  const resizeExplorerMap = () => {
+    if (!explorerMap || !mapElement.isConnected) return;
+    const rect = mapElement.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) explorerMap.resize();
+  };
+  requestAnimationFrame(() => requestAnimationFrame(resizeExplorerMap));
+  setTimeout(resizeExplorerMap, 250);
+  setTimeout(resizeExplorerMap, 800);
+  if (window.ResizeObserver) {
+    if (window.__explorerMapResizeObserver) window.__explorerMapResizeObserver.disconnect();
+    window.__explorerMapResizeObserver = new ResizeObserver(resizeExplorerMap);
+    window.__explorerMapResizeObserver.observe(mapElement);
+  }
+  window.addEventListener("resize", resizeExplorerMap, { passive: true });
+
   explorerMap.on("load", () => {
-    explorerMap.resize();
+    resizeExplorerMap();
     addExplorerRouteLayer();
 
     addExplorerPlaceMarkers(restaurantsResult?.restaurants, "restaurant");
@@ -1182,8 +1197,15 @@ byId("travelExplorerForm").addEventListener("submit", async event => {
       explorerResults.insertAdjacentHTML("beforeend", renderExplorerError(title, error));
     });
   } else {
-    explorerStatus.className = "explorer-status success";
-    explorerStatus.textContent = `Live destination data loaded for ${destination}.`;
+    const hasCoordinates = Number.isFinite(Number(mapValue?.coordinates?.latitude))
+      && Number.isFinite(Number(mapValue?.coordinates?.longitude));
+    const hasPlaces = Boolean((restaurantsValue?.restaurants || []).length || (hotelsValue?.hotels || []).length);
+    explorerStatus.className = hasCoordinates && hasPlaces ? "explorer-status success" : "explorer-status error";
+    explorerStatus.textContent = hasCoordinates && hasPlaces
+      ? `Destination data loaded for ${destination}.`
+      : hasCoordinates
+        ? `Found ${destination}, but no restaurants or hotels were returned. Check provider status below or try a nearby city.`
+        : `Could not resolve ${destination}. Check the provider status below and try a more specific destination.`;
   }
 
   button.disabled = false;
@@ -1209,7 +1231,8 @@ async function loadKnowledgeStatus() {
 
 byId("knowledgeForm").addEventListener("submit", async event => {
   event.preventDefault();
-  const button = event.currentTarget.querySelector("button");
+  const form = event.currentTarget;
+  const button = form.querySelector("button");
   const file = byId("knowledgeFile").files[0];
   if (!file) return;
   button.disabled = true; button.textContent = "Adding knowledge...";
@@ -1220,14 +1243,33 @@ byId("knowledgeForm").addEventListener("submit", async event => {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.detail || "Upload failed.");
     uploadStatus.textContent = `${payload.filename} added successfully (${payload.chunks_added} knowledge sections). Ask the travel assistant a question now.`;
-    uploadStatus.className = "upload-status success"; event.currentTarget.reset();
+    uploadStatus.className = "upload-status success"; form.reset();
   } catch (error) { uploadStatus.textContent = error.message; uploadStatus.className = "upload-status error"; }
   finally { button.disabled = false; button.textContent = "Add to AI knowledge base"; }
 });
 
 byId("expenseForm").addEventListener("submit", async event => {
   event.preventDefault();
-  try { await api("/api/expenses", { method: "POST", body: JSON.stringify({ title: byId("expenseTitle").value, amount: +byId("expenseAmount").value, category: "General", destination: "Current trip" }) }); event.currentTarget.reset(); loadExpenses(); } catch (error) { byId("expenseList").textContent = error.message; }
+  const form = event.currentTarget;
+  const submitButton = form.querySelector("button[type='submit'], button:not([type])");
+  if (submitButton) submitButton.disabled = true;
+  try {
+    await api("/api/expenses", {
+      method: "POST",
+      body: JSON.stringify({
+        title: byId("expenseTitle").value.trim(),
+        amount: Number(byId("expenseAmount").value),
+        category: "General",
+        destination: "Current trip"
+      })
+    });
+    form.reset();
+    await loadExpenses();
+  } catch (error) {
+    byId("expenseList").textContent = error.message;
+  } finally {
+    if (submitButton) submitButton.disabled = false;
+  }
 });
 
 byId("chatForm").addEventListener("submit", async event => {
