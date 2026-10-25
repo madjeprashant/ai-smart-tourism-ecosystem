@@ -1387,19 +1387,87 @@ async function loadExpenses() {
   try { const data = await api("/api/expenses"); byId("expenseList").innerHTML = `<strong>Total spent: ${money(data.total)}</strong>${data.items.map(item => `<div class="d-flex justify-content-between border-top pt-2 mt-2"><span>${escapeHtml(item.title)}</span><span>${money(item.amount)}</span></div>`).join("")}`; } catch (_) { byId("expenseList").innerHTML = '<span class="text-muted">Add an expense to start tracking your trip budget.</span>'; }
 }
 
+let communityStories = [];
+
+function renderCommunityStories() {
+  const container = byId("stories");
+  const search = (byId("storySearch")?.value || "").trim().toLocaleLowerCase();
+  const destination = byId("storyDestinationFilter")?.value || "";
+  const filtered = communityStories.filter(item => {
+    const searchable = [item.destination, item.title, item.content, item.author].filter(Boolean).join(" ").toLocaleLowerCase();
+    return (!search || searchable.includes(search)) && (!destination || item.destination === destination);
+  });
+  const count = byId("storyCount");
+  if (count) count.textContent = `${filtered.length} ${filtered.length === 1 ? "story" : "stories"}`;
+
+  if (!filtered.length) {
+    container.innerHTML = communityStories.length
+      ? '<div class="community-empty"><span class="community-empty-icon">⌕</span><h3>No matching stories</h3><p>Try another destination or search term.</p><button type="button" class="btn btn-outline-primary btn-sm" id="clearStoryFilters">Clear filters</button></div>'
+      : '<div class="community-empty"><span class="community-empty-icon">✦</span><h3>The journey starts here</h3><p>Be the first to share a destination, a helpful tip, or a favourite travel memory.</p></div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((item, index) => {
+    const mediaItems = item.media_items?.length ? item.media_items : (item.media_url ? [{ media_url: item.media_url, media_type: item.media_type }] : []);
+    const media = mediaItems.map((mediaItem, mediaIndex) => {
+      if (mediaItem.media_type === "image") return `<img class="story-media ${mediaIndex === 0 ? "story-cover" : "story-extra-image"}" src="${escapeHtml(mediaItem.media_url)}" alt="Travel memory from ${escapeHtml(item.destination)}" loading="lazy">`;
+      if (mediaItem.media_type === "audio") return `<audio class="story-media story-audio" controls preload="none" src="${escapeHtml(mediaItem.media_url)}" aria-label="Audio travel memory"></audio>`;
+      return `<video class="story-media story-video" controls preload="metadata" src="${escapeHtml(mediaItem.media_url)}" aria-label="Video travel memory"></video>`;
+    }).join("");
+    const content = escapeHtml(item.content || "");
+    const showMore = (item.content || "").length > 210;
+    return `<article class="story-card">
+      <div class="story-card-media">${media || '<div class="story-cover-placeholder"><span aria-hidden="true">✦</span><small>Travel memory</small></div>'}</div>
+      <div class="story-card-body">
+        <div class="story-card-meta"><span class="story-destination"><span aria-hidden="true">⌖</span> ${escapeHtml(item.destination)}</span><span class="story-community-label">COMMUNITY STORY</span></div>
+        <h3 class="story-card-title">${escapeHtml(item.title)}</h3>
+        <p class="story-card-content ${showMore ? "is-clamped" : ""}" data-story-content="${index}">${content}</p>
+        ${showMore ? `<button class="story-read-more" type="button" data-story-toggle="${index}" aria-expanded="false">Read full story <span aria-hidden="true">↓</span></button>` : ""}
+        <div class="story-card-footer"><span class="story-author-avatar" aria-hidden="true">${escapeHtml((item.author || "T").trim().charAt(0).toUpperCase())}</span><span class="story-author"><small>Shared by</small><strong>${escapeHtml(item.author || "Traveller")}</strong></span><span class="story-footer-mark" aria-hidden="true">✦</span></div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
 async function loadStories() {
   try {
     const data = await api("/api/stories");
-    byId("stories").innerHTML = data.length ? data.map(item => {
-      const mediaItems = item.media_items?.length ? item.media_items : (item.media_url ? [{ media_url: item.media_url, media_type: item.media_type }] : []);
-      const media = mediaItems.map(mediaItem => mediaItem.media_type === "image" ? `<img class="story-media" src="${escapeHtml(mediaItem.media_url)}" alt="Travel memory">` : mediaItem.media_type === "audio" ? `<audio class="story-media" controls src="${escapeHtml(mediaItem.media_url)}"></audio>` : `<video class="story-media" controls src="${escapeHtml(mediaItem.media_url)}"></video>`).join("");
-      return `<div class="col-md-4"><article class="story"><small class="text-primary">${escapeHtml(item.destination)}</small><h5 class="mt-1">${escapeHtml(item.title)}</h5>${media}<p>${escapeHtml(item.content)}</p><small>— ${escapeHtml(item.author)}</small></article></div>`;
-    }).join("") : '<p class="text-muted mt-3">No stories yet. Be the first to share a travel insight.</p>';
+    communityStories = Array.isArray(data) ? data : [];
+    const filter = byId("storyDestinationFilter");
+    if (filter) {
+      const current = filter.value;
+      const destinations = [...new Set(communityStories.map(item => (item.destination || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+      filter.innerHTML = '<option value="">All destinations</option>' + destinations.map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
+      if (destinations.includes(current)) filter.value = current;
+    }
+    renderCommunityStories();
   } catch (_) {
-    byId("stories").innerHTML = '<p class="text-muted mt-3">Sign in to view your stories.</p>';
+    communityStories = [];
+    byId("stories").innerHTML = '<div class="community-empty"><span class="community-empty-icon">✦</span><h3>Sign in to explore stories</h3><p>Sign in to see travel experiences shared by the VoyageAI community.</p></div>';
+    const count = byId("storyCount");
+    if (count) count.textContent = "Community feed";
   }
 }
 
+byId("storySearch")?.addEventListener("input", renderCommunityStories);
+byId("storyDestinationFilter")?.addEventListener("change", renderCommunityStories);
+byId("stories")?.addEventListener("click", event => {
+  const toggle = event.target.closest("[data-story-toggle]");
+  if (toggle) {
+    const paragraph = byId("stories").querySelector(`[data-story-content="${toggle.dataset.storyToggle}"]`);
+    if (!paragraph) return;
+    const expanded = paragraph.classList.toggle("is-expanded");
+    paragraph.classList.toggle("is-clamped", !expanded);
+    toggle.setAttribute("aria-expanded", String(expanded));
+    toggle.innerHTML = expanded ? 'Show less <span aria-hidden="true">↑</span>' : 'Read full story <span aria-hidden="true">↓</span>';
+    return;
+  }
+  if (event.target.closest("#clearStoryFilters")) {
+    byId("storySearch").value = "";
+    byId("storyDestinationFilter").value = "";
+    renderCommunityStories();
+  }
+});
 
 loadExpenses();
 loadStories();

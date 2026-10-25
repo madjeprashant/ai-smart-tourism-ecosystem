@@ -132,7 +132,19 @@
       </div>
     </section>
 
-    <section class="container section-space" id="stories-section"><div class="stories-head"><div><p class="eyebrow accent">FROM THE COMMUNITY</p><h2>Stories worth taking with you.</h2><p>Practical tips and experiences shared by fellow travellers.</p></div><button id="shareStoryButton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#storyModal">Share your story <span>→</span></button></div><div id="stories" class="row g-3 mt-1"></div></section>
+    <section class="container section-space community-section" id="stories-section">
+      <div class="stories-head">
+        <div><p class="eyebrow accent">THE VOYAGEAI COMMUNITY</p><h2>Stories from the road.</h2><p>Find inspiration, local tips, and real experiences shared by fellow travellers.</p></div>
+        <button id="shareStoryButton" class="btn btn-primary community-share" data-bs-toggle="modal" data-bs-target="#storyModal"><span aria-hidden="true">＋</span> Share your story</button>
+      </div>
+      <div class="community-toolbar" role="search" aria-label="Search community stories">
+        <label class="community-search"><span aria-hidden="true">⌕</span><input id="storySearch" type="search" class="form-control" placeholder="Search destinations, stories, or tips…" aria-label="Search stories"></label>
+        <label class="community-filter-label" for="storyDestinationFilter">Destination</label>
+        <select id="storyDestinationFilter" class="form-select" aria-label="Filter stories by destination"><option value="">All destinations</option></select>
+        <span id="storyCount" class="story-count" aria-live="polite">Explore traveller stories</span>
+      </div>
+      <div id="stories" class="community-story-grid" aria-live="polite"></div>
+    </section>
   </main>
 
   <footer><div class="container"><a class="navbar-brand" href="#home"><span class="brand-mark">✦</span> VoyageAI</a><p>AI Smart Tourism Ecosystem · Plan with confidence, travel with curiosity.</p></div></footer>
