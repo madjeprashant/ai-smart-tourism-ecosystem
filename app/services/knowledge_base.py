@@ -12,6 +12,7 @@ Routing:
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import shutil
@@ -20,6 +21,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from sqlalchemy import select
 
+
+logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -745,8 +748,9 @@ def answer_with_global_travel(question: str) -> dict | None:
             return web_result
 
     except Exception:
-        # Web grounding is helpful but should not break the assistant.
-        pass
+        # Keep the fallback resilient, but leave enough detail in server logs
+        # to diagnose invalid keys, unsupported models, quotas, or SDK errors.
+        logger.exception("VoyageAI Google Search-grounded answer failed; trying Gemini fallback")
 
     # Second choice: Gemini's general travel knowledge.
     _, _, ChatGoogleGenerativeAI, _, _ = _imports()
@@ -838,6 +842,12 @@ def answer_question(question: str, db=None) -> dict | None:
     if not question:
         return None
 
+    if not ai_is_configured():
+        logger.warning(
+            "VoyageAI chat is unavailable because GEMINI_API_KEY is not set "
+            "in the running environment."
+        )
+
     # Do not block ordinary destination/factual questions. This guard only
     # catches questions that are unambiguously outside a travel assistant's
     # scope.
@@ -882,11 +892,13 @@ def answer_question(question: str, db=None) -> dict | None:
         # second, while labelling the source correctly.
         return answer_with_global_travel(question)
     except Exception:
-        # Never expose a backend exception to the UI. If the private route
-        # fails unexpectedly, make one final worldwide attempt.
+        # Never expose backend details to the browser, but preserve the error
+        # in Render logs so a failed provider call is not silently hidden.
+        logger.exception("VoyageAI private knowledge route failed; trying worldwide fallback")
         try:
             return answer_with_global_travel(question)
         except Exception:
+            logger.exception("VoyageAI worldwide travel fallback failed")
             return None
     finally:
         if owned_db and session is not None:

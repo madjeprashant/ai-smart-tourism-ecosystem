@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -6,6 +8,8 @@ from ..schemas import ChatRequest
 from ..security import get_current_user
 from ..services.knowledge_base import answer_question
 
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api",
@@ -78,10 +82,16 @@ def chat(
         if result is not None:
             return result
 
+        logger.error(
+            "VoyageAI returned no answer for /api/chat. Check GEMINI_API_KEY, "
+            "provider model availability, quota, and the knowledge_base logs."
+        )
+
     # ---------------------------------------------------------
     # 4. Handle known backend/runtime failures
     # ---------------------------------------------------------
     except RuntimeError as error:
+        logger.exception("VoyageAI chat runtime error")
         error_text = str(error)
 
         if "RESOURCE_EXHAUSTED" in error_text or "429" in error_text:
@@ -99,6 +109,7 @@ def chat(
         ) from error
 
     except Exception as error:
+        logger.exception("Unexpected VoyageAI chat error")
         error_text = str(error)
 
         # Invalid Gemini API key
