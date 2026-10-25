@@ -39,7 +39,9 @@ class Step12Phase4E2E(unittest.TestCase):
 
     def test_03_frontend_renders_answer_and_sources_safely(self):
         self.assertIn("response.answer", self.js)
-        self.assertIn("escapeHtml(response.answer)", self.js)
+        self.assertIn("window.marked?.parse", self.js)
+        self.assertIn("window.DOMPurify?.sanitize", self.js)
+        self.assertIn("escapeHtml(rawMarkdown)", self.js)
         self.assertIn("response.sources", self.js)
         self.assertIn("answer-sources", self.js)
         self.assertIn("escapeHtml(response.sources.join", self.js)
@@ -143,7 +145,15 @@ class Step12Phase4E2E(unittest.TestCase):
 
         self.app.dependency_overrides[get_current_user] = fake_user
         try:
-            with patch("app.routers.chat.answer_question", return_value=expected):
+            with patch(
+            "app.routers.chat.answer_with_knowledge",
+            return_value=expected,
+        ) as private_knowledge, patch(
+            "app.routers.chat.answer_with_global_travel",
+            side_effect=AssertionError(
+                "Global fallback should not run when private knowledge answers"
+            ),
+        ):
                 response = TestClient(self.app).post(
                     "/api/chat",
                     json={"question": "What should I visit in Mysuru?"},

@@ -1,15 +1,14 @@
-import logging
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..schemas import ChatRequest
 from ..security import get_current_user
-from ..services.knowledge_base import answer_question
+from ..services.knowledge_base import (
+    answer_with_knowledge,
+    answer_with_global_travel,
+)
 
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api",
@@ -24,133 +23,68 @@ def chat(
     current_user=Depends(get_current_user),
 ):
     """
-    Main API entry point for the VoyageAI hybrid travel assistant.
+    Travel Assistant routing:
 
-    The actual routing remains centralized inside:
-        knowledge_base.answer_question()
+    1. Try the private/approved VoyageAI knowledge first:
+       - uploaded tourism documents
+       - approved Community Stories
 
-    Routing order:
+    2. If no relevant knowledge is found, use the worldwide travel
+       fallback:
+       - Google Search grounding first
+       - Gemini general travel knowledge if web grounding is unavailable
 
-    1. Reject invalid/empty questions.
-    2. Check private project knowledge and approved Community Stories.
-    3. If private knowledge is insufficient, use worldwide travel routing.
-    4. Worldwide routing may use Google Search grounding.
-    5. If web grounding is unavailable, use Gemini general travel knowledge.
-    6. Preserve truthful source and route metadata for the frontend.
-
-    Authentication is required through get_current_user().
+    The response returned by the knowledge service contains the source
+    classification used by the frontend.
     """
-
-    # ---------------------------------------------------------
-    # 1. Validate the incoming question
-    # ---------------------------------------------------------
-    question = request.question.strip()
-
-    if not question:
-        raise HTTPException(
-            status_code=422,
-            detail="Please enter a travel question.",
-        )
-
-    # ---------------------------------------------------------
-    # 2. Protect against unnecessarily huge requests
-    # ---------------------------------------------------------
-    if len(question) > 2000:
-        raise HTTPException(
-            status_code=422,
-            detail="Please keep your travel question under 2000 characters.",
-        )
-
-    # ---------------------------------------------------------
-    # 3. Use the centralized hybrid router
-    # ---------------------------------------------------------
     try:
-        result = answer_question(
-            question,
+        # Priority 1: grounded VoyageAI knowledge.
+        # Passing db allows approved Community Stories to be synchronized
+        # and searched together with uploaded tourism documents.
+        result = answer_with_knowledge(
+            request.question,
             db=db,
         )
 
-        # answer_question() is responsible for deciding:
-        #
-        # private knowledge
-        #        ↓
-        # worldwide fallback
-        #
-        # Therefore the API route must NOT perform a second
-        # independent routing decision.
+        # Priority 2: worldwide travel fallback.
+        # This is reached only when the private knowledge base does not
+        # contain sufficiently relevant information.
+        if result is None:
+            result = answer_with_global_travel(
+                request.question,
+            )
 
-        if result is not None:
+        if result:
             return result
 
-        logger.error(
-            "VoyageAI returned no answer for /api/chat. Check GEMINI_API_KEY, "
-            "provider model availability, quota, and the knowledge_base logs."
-        )
-
-    # ---------------------------------------------------------
-    # 4. Handle known backend/runtime failures
-    # ---------------------------------------------------------
     except RuntimeError as error:
-        logger.exception("VoyageAI chat runtime error")
-        error_text = str(error)
-
-        if "RESOURCE_EXHAUSTED" in error_text or "429" in error_text:
-            raise HTTPException(
-                status_code=503,
-                detail=(
-                    "The Gemini API quota is temporarily exhausted. "
-                    "Please wait for the quota to reset and try again."
-                ),
-            ) from error
-
-        raise HTTPException(
-            status_code=503,
-            detail=str(error),
-        ) from error
+        # Missing packages and explicit configuration errors are not retrieval
+        # misses; surface them so they can be fixed instead of masking them.
+        raise HTTPException(status_code=503, detail=str(error)) from error
 
     except Exception as error:
-        logger.exception("Unexpected VoyageAI chat error")
-        error_text = str(error)
+        error_text = str(error).lower()
+        invalid_key = any(marker in error_text for marker in (
+            "api_key_invalid", "api key not valid", "invalid api key",
+            "unauthenticated", "permission_denied", "permission denied",
+            "authentication", "credentials", "billing not enabled",
+            "quota project", "model not found", "unsupported model",
+        ))
+        if invalid_key:
+            detail = (
+                "Gemini authentication or configuration failed. Check GEMINI_API_KEY, "
+                "the selected model, and Google AI Studio project settings."
+            )
+            raise HTTPException(status_code=502, detail=detail) from error
 
-        # Invalid Gemini API key
-        if (
-            "API_KEY_INVALID" in error_text
-            or "API key not valid" in error_text
-        ):
-            raise HTTPException(
-                status_code=502,
-                detail=(
-                    "The Gemini API key configured in .env is invalid. "
-                    "Create a new key in Google AI Studio, update "
-                    "GEMINI_API_KEY, and restart the application."
-                ),
-            ) from error
-
-        # Gemini quota/rate limit
-        if (
-            "RESOURCE_EXHAUSTED" in error_text
-            or "429" in error_text
-        ):
-            raise HTTPException(
-                status_code=503,
-                detail=(
-                    "The Gemini API quota is temporarily exhausted. "
-                    "Please wait for the quota to reset and try again."
-                ),
-            ) from error
-
-        # Other unexpected AI/backend error
+        # The knowledge service is responsible for converting recoverable
+        # retrieval failures into None and attempting the global fallback.
+        # Any remaining exception is a genuine service failure; don't hide it.
         raise HTTPException(
             status_code=502,
-            detail=(
-                "The travel assistant could not generate an answer "
-                "right now. Please try again."
-            ),
+            detail="The Travel Assistant could not complete the request. Check the server logs and configuration.",
         ) from error
 
-    # ---------------------------------------------------------
-    # 5. Safe final response
-    # ---------------------------------------------------------
     return {
         "answer": (
             "I could not generate a travel answer right now. "

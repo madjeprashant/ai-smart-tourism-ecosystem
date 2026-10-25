@@ -22,9 +22,8 @@ from dotenv import load_dotenv
 from sqlalchemy import select
 
 
-logger = logging.getLogger(__name__)
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+logger = logging.getLogger(__name__)
 
 # Load the project's .env whenever this service is imported.
 # This keeps FastAPI, tests and direct Python execution consistent.
@@ -455,6 +454,19 @@ def _looks_like_unsupported_answer(answer: str) -> bool:
     return False
 
 
+def _is_fatal_ai_configuration_error(error: Exception) -> bool:
+    """Return True for errors that must not be hidden by fallback handling."""
+    message = str(error).lower()
+    markers = (
+        "api_key_invalid", "api key not valid", "invalid api key",
+        "unauthenticated", "permission_denied", "permission denied",
+        "authentication", "credentials", "billing not enabled",
+        "quota project", "model not found", "unsupported model",
+        "gemini_api_key", "missing gemini", "ai packages are not installed",
+    )
+    return any(marker in message for marker in markers)
+
+
 def answer_with_knowledge(question: str, db=None) -> dict | None:
     """Answer from relevant private/approved knowledge only.
 
@@ -469,40 +481,48 @@ def answer_with_knowledge(question: str, db=None) -> dict | None:
 
     retrieved = []
 
-    # 1. Uploaded tourism documents.
-    if FAISS_DIR.exists():
-        store = FAISS.load_local(
-            str(FAISS_DIR),
-            _embeddings(),
-            allow_dangerous_deserialization=True,
-        )
-
-        retrieved.extend(
-            (doc, score, "tourism_document")
-            for doc, score in store.similarity_search_with_score(
-                question,
-                k=RETRIEVAL_K_PER_SOURCE,
-            )
-        )
-
-    # 2. Approved community stories.
-    if db is not None:
-        sync_community_stories(db)
-
-        if COMMUNITY_FAISS_DIR.exists():
-            community_store = FAISS.load_local(
-                str(COMMUNITY_FAISS_DIR),
+    # Retrieval is best-effort: a corrupt/missing index or transient vector-store
+    # failure should not prevent the general travel fallback. Authentication,
+    # invalid-key, missing-package and configuration errors must still surface.
+    try:
+        # 1. Uploaded tourism documents.
+        if FAISS_DIR.exists():
+            store = FAISS.load_local(
+                str(FAISS_DIR),
                 _embeddings(),
                 allow_dangerous_deserialization=True,
             )
-
             retrieved.extend(
-                (doc, score, "community_story")
-                for doc, score in community_store.similarity_search_with_score(
-                    question,
-                    k=RETRIEVAL_K_PER_SOURCE,
+                (doc, score, "tourism_document")
+                for doc, score in store.similarity_search_with_score(
+                    question, k=RETRIEVAL_K_PER_SOURCE,
                 )
             )
+
+        # 2. Approved community stories.
+        if db is not None:
+            sync_community_stories(db)
+            if COMMUNITY_FAISS_DIR.exists():
+                community_store = FAISS.load_local(
+                    str(COMMUNITY_FAISS_DIR),
+                    _embeddings(),
+                    allow_dangerous_deserialization=True,
+                )
+                retrieved.extend(
+                    (doc, score, "community_story")
+                    for doc, score in community_store.similarity_search_with_score(
+                        question, k=RETRIEVAL_K_PER_SOURCE,
+                    )
+                )
+    except Exception as error:
+        if _is_fatal_ai_configuration_error(error):
+            raise
+        logger.warning(
+            "Tourism knowledge retrieval failed; trying global travel fallback: %s",
+            error,
+            exc_info=True,
+        )
+        return None
 
     # 3. Relevance gate.
     selected = _select_relevant_documents(
@@ -747,10 +767,12 @@ def answer_with_global_travel(question: str) -> dict | None:
         if web_result:
             return web_result
 
-    except Exception:
-        # Keep the fallback resilient, but leave enough detail in server logs
-        # to diagnose invalid keys, unsupported models, quotas, or SDK errors.
-        logger.exception("VoyageAI Google Search-grounded answer failed; trying Gemini fallback")
+    except Exception as error:
+        if _is_fatal_ai_configuration_error(error):
+            raise
+        # Search grounding is optional; transient/search-tool failures may
+        # fall through to Gemini general knowledge. Log them for diagnosis.
+        logger.warning("Google Search grounding failed; trying Gemini fallback: %s", error, exc_info=True)
 
     # Second choice: Gemini's general travel knowledge.
     _, _, ChatGoogleGenerativeAI, _, _ = _imports()
@@ -842,12 +864,6 @@ def answer_question(question: str, db=None) -> dict | None:
     if not question:
         return None
 
-    if not ai_is_configured():
-        logger.warning(
-            "VoyageAI chat is unavailable because GEMINI_API_KEY is not set "
-            "in the running environment."
-        )
-
     # Do not block ordinary destination/factual questions. This guard only
     # catches questions that are unambiguously outside a travel assistant's
     # scope.
@@ -892,13 +908,11 @@ def answer_question(question: str, db=None) -> dict | None:
         # second, while labelling the source correctly.
         return answer_with_global_travel(question)
     except Exception:
-        # Never expose backend details to the browser, but preserve the error
-        # in Render logs so a failed provider call is not silently hidden.
-        logger.exception("VoyageAI private knowledge route failed; trying worldwide fallback")
+        # Never expose a backend exception to the UI. If the private route
+        # fails unexpectedly, make one final worldwide attempt.
         try:
             return answer_with_global_travel(question)
         except Exception:
-            logger.exception("VoyageAI worldwide travel fallback failed")
             return None
     finally:
         if owned_db and session is not None:

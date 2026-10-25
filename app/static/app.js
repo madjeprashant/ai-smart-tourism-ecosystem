@@ -1282,8 +1282,23 @@ byId("chatForm").addEventListener("submit", async event => {
   }
   try {
     const response = await api("/api/chat", { method: "POST", body: JSON.stringify({ question: byId("question").value }) });
-    const sources = response.sources?.length ? `<small class="answer-sources">Source: ${escapeHtml(response.sources.join(", "))}</small>` : "";
-    answer.innerHTML = `${escapeHtml(response.answer)}${sources}`;
+    // Render Markdown only through DOMPurify. If either library is unavailable,
+    // fall back to escaped plain text rather than inserting untrusted HTML.
+    const rawMarkdown = String(response.answer ?? "");
+    const renderedAnswer = (window.marked?.parse && window.DOMPurify?.sanitize)
+      ? window.DOMPurify.sanitize(window.marked.parse(rawMarkdown, { breaks: true, gfm: true }))
+      : `<p>${escapeHtml(rawMarkdown).replace(/\r?\n/g, "<br>")}</p>`;
+    const sourceTypeLabels = {
+      private_knowledge: "Project knowledge",
+      web_travel: "Gemini + Google Search",
+      global_travel: "Gemini general travel knowledge",
+      none: "No source available"
+    };
+    const sourceType = sourceTypeLabels[response.source_type] || "Travel assistant";
+    const sources = response.sources?.length
+      ? `<small class="answer-sources">Source: ${escapeHtml(response.sources.join(", "))}</small>`
+      : "";
+    answer.innerHTML = `<div class="chat-answer-markdown">${renderedAnswer}</div><small class="answer-source-type">${escapeHtml(sourceType)}</small>${sources}`;
   } catch (error) { answer.textContent = error.message; }
 });
 
