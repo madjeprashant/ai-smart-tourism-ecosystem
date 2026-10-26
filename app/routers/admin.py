@@ -75,6 +75,41 @@ def list_users(db: Session = Depends(get_db), admin: User = Depends(get_current_
     return [_user_dict(user) for user in users]
 
 
+@router.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db), admin: User = Depends(get_current_admin)):
+    """Permanently delete a user and the records owned by that user."""
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.id == admin.id:
+        raise HTTPException(status_code=400, detail="You cannot delete your own administrator account")
+
+    if user.role == "admin":
+        admin_count = db.scalar(
+            select(func.count()).select_from(User).where(User.role == "admin")
+        ) or 0
+        if admin_count <= 1:
+            raise HTTPException(status_code=400, detail="You cannot delete the last administrator account")
+
+    # Remove dependent records first because trips have a non-null user foreign key.
+    # Stories are removed rather than left attached to a deleted account.
+    db.query(Trip).filter(Trip.user_id == user.id).delete(synchronize_session=False)
+    db.query(Expense).filter(Expense.user_id == user.id).delete(synchronize_session=False)
+    db.query(Story).filter(Story.user_id == user.id).delete(synchronize_session=False)
+    db.delete(user)
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="User could not be deleted because of a database error")
+
+    return {
+        "message": "User and associated trips, expenses, and stories deleted successfully",
+        "id": user_id,
+    }
+
+
 @router.patch("/users/{user_id}/role")
 def update_user_role(user_id: int, role: str, db: Session = Depends(get_db), admin: User = Depends(get_current_admin)):
     if role not in {"traveler", "admin"}:
