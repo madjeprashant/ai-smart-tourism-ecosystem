@@ -204,86 +204,111 @@ byId("plannerForm").addEventListener("submit", async event => {
   try {
     const data = await api("/api/itineraries/preview", { method: "POST", body: JSON.stringify({ destination: byId("destination").value, days: +byId("days").value, budget: +byId("budget").value, interests: byId("interests").value.split(",").map(item => item.trim()).filter(Boolean) }) });
     const dailyBudget = data.budget / data.days;
-    itinerary.innerHTML = `<div class="itinerary-intro"><div class="itinerary-intro-main"><p class="eyebrow accent">PERSONALISED TRAVEL GUIDE</p><h2>${escapeHtml(data.destination)} · ${data.days} days</h2><p class="text-muted mb-1">Trip budget: <strong>${money(data.budget)}</strong> · around ${money(dailyBudget)} per day</p><button type="button" class="btn btn-outline-primary" id="saveItineraryButton">Save this itinerary <span>♡</span></button></div><div class="trip-estimate"><span>ESTIMATED TRIP TOTAL</span><strong>${money(data.estimated_trip_cost_inr)}</strong><small>Includes visits and 3 meals per day${data.budget_estimates_adjusted ? "; estimates adjusted to fit your budget" : ""}</small></div></div>${data.itinerary.map(day => `<article class="trip-day"><div class="day-header"><div><span>DAY ${day.day}</span><h3>${escapeHtml(day.day_title)}</h3></div><strong>${money(day.estimated_day_cost_inr)}<small>day estimate · visits + 3 meals</small></strong></div>${Array.isArray(day.schedule) ? renderDaySchedule(day) : (day.guide_sections && day.guide_sections.length ? day.guide_sections.map(renderGuideSection).join("") : `<div class="empty-itinerary"><h4>No named places found</h4><p>${escapeHtml(day.availability_note || "Try another destination or interest.")}</p></div>`)}</article>`).join("")}<div class="planner-tips"><h3>Smart budget tips</h3><ul><li>Keep some budget aside for local transport and entry tickets.</li><li>Confirm prices and opening hours before travelling.</li><li>Carry water, sunscreen and a government photo ID.</li></ul></div>`;
-    byId("saveItineraryButton").addEventListener("click", () => saveGeneratedItinerary(data));
-  } catch (error) {
-    itinerary.innerHTML = `<div class="empty-itinerary"><span class="empty-icon">!</span><h3>We could not create the itinerary</h3><p>${escapeHtml(error.message)}</p></div>`;
-  } finally {
-    button.disabled = false;
-    button.innerHTML = originalText;
-  }
+    itinerary.innerHTML = `<div class="itinerary-intro"><div class="itinerary-intro-main"><p class="eyebrow accent">PERSONALISED TRAVEL GUIDE</p><h2>${escapeHtml(data.destination)} · ${data.days} days</h2><p class="text-muted mb-1">Trip budget: <strong>${money(data.budget)}</strong> · around ${money(dailyBudget)} per day</p><button type="button" class="btn btn-outline-primary" id="saveItineraryButton">Save this itinerary <span>♡</span></button></div><div class="trip-estimate"><span>ESTIMATED TRIP TOTAL</span><strong>${money(data.estimated_trip_cost_inr)}</strong><small>Includes visits and 3 meals per day${data.budget_estimates_adjusted ? "; estimates adjusted to fit your budget" : ""}</small></div></div>${data.itinerary.map(day => `<article class="trip-day"><div class="day-header"><div><span>DAY ${day.day}</span><h3>${escapeHtml(day.day_title)}</h3></div><strong>${money(day.estimated_day_cost_inr)}<small>day estimate · visits + 3 meals</small></strong></div
+${!Array.isArray(day.activities) || day.activities.length === 0
+  ? `<div class="empty-itinerary">
+       <h4>No named attractions found for this day</h4>
+       <p>${escapeHtml(day.availability_note || "No verified attractions were returned for this day. Try another destination or interest.")}</p>
+     </div>`
+  : (Array.isArray(day.schedule)
+      ? renderDaySchedule(day)
+      : (day.guide_sections && day.guide_sections.length
+          ? day.guide_sections.map(renderGuideSection).join("")
+          : `<div class="empty-itinerary">
+               <h4>No schedule available</h4>
+               <p>${escapeHtml(day.availability_note || "Try another destination or interest.")}</p>
+             </div>`))}
+</article>`).join("")}`;
+    byId("planner")?.scrollIntoView({ behavior: "smooth" });
+  } catch (error) { alert(error.message); }
 });
 
-async function saveGeneratedItinerary(data) {
-  const button = byId("saveItineraryButton");
-  if (!getToken()) {
-    bootstrap.Modal.getOrCreateInstance(byId("loginModal")).show();
-    return;
-  }
-  button.disabled = true;
-  button.textContent = "Saving...";
-  try {
-    await api("/api/itineraries", {
-      method: "POST",
-      body: JSON.stringify({
-        destination: data.destination,
-        days: Number(data.days),
-        budget: Number(data.budget),
-        interests: Array.isArray(data.interests) ? data.interests : byId("interests").value.split(",").map(x => x.trim()).filter(Boolean)
-      })
-    });
-    button.textContent = "Saved ✓";
-    button.classList.remove("btn-outline-primary");
-    button.classList.add("btn-primary");
-    await loadSavedItineraries();
-  } catch (error) {
-    button.disabled = false;
-    button.textContent = "Save this itinerary ♡";
-    alert(error.message);
-  }
-}
-
-function renderSavedItinerary(item) {
-  const created = item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN") : "";
-  const interests = Array.isArray(item.interests) ? item.interests : [];
-  return `<article class="saved-itinerary-card"><div class="saved-itinerary-head"><div><p class="eyebrow accent mb-1">SAVED TRIP</p><h3>${escapeHtml(item.destination)}</h3></div><span class="saved-trip-days">${escapeHtml(item.days)} days</span></div><p class="saved-itinerary-meta">Budget: <strong>${money(item.budget)}</strong>${created ? ` · Saved ${escapeHtml(created)}` : ""}</p>${interests.length ? `<div class="saved-interest-list">${interests.map(x => `<span>${escapeHtml(x)}</span>`).join("")}</div>` : ""}<div class="saved-itinerary-actions"><button class="btn btn-sm btn-outline-primary" type="button" data-view-trip="${item.id}">View</button><button class="btn btn-sm btn-outline-danger" type="button" data-delete-trip="${item.id}">Delete</button></div></article>`;
-}
 
 async function loadSavedItineraries() {
   const container = byId("savedItineraries");
   if (!container) return;
+
   if (!getToken()) {
     container.innerHTML = '<div class="saved-empty"><span class="empty-icon">♡</span><h3>Your saved trips will appear here</h3><p>Sign in and save an itinerary to keep it for later.</p></div>';
     return;
   }
+
   try {
-    const data = await api("/api/itineraries");
-    const items = data.itineraries || [];
-    container.innerHTML = items.length ? items.map(renderSavedItinerary).join("") : '<div class="saved-empty"><span class="empty-icon">✦</span><h3>No saved itineraries yet</h3><p>Generate a trip above and choose “Save this itinerary”.</p></div>';
-    container.querySelectorAll("[data-view-trip]").forEach(btn => btn.addEventListener("click", () => viewSavedItinerary(btn.dataset.viewTrip)));
-    container.querySelectorAll("[data-delete-trip]").forEach(btn => btn.addEventListener("click", () => deleteSavedItinerary(btn.dataset.deleteTrip)));
+    const response = await api("/api/itineraries");
+    const trips = Array.isArray(response)
+      ? response
+      : Array.isArray(response?.items)
+        ? response.items
+        : Array.isArray(response?.itineraries)
+          ? response.itineraries
+          : [];
+
+    if (!trips.length) {
+      container.innerHTML = '<div class="saved-empty"><span class="empty-icon">♡</span><h3>No saved trips yet</h3><p>Generate a travel guide and choose “Save this itinerary”.</p></div>';
+      return;
+    }
+
+    container.innerHTML = trips.map(trip => `
+      <article class="saved-itinerary-card">
+        <div class="saved-itinerary-card__body">
+          <p class="eyebrow accent">SAVED TRIP</p>
+          <h3>${escapeHtml(trip.destination || "Travel itinerary")}</h3>
+          <p>${Number(trip.days || 0)} day${Number(trip.days || 0) === 1 ? "" : "s"} · Budget ${money(trip.budget)}</p>
+          ${trip.created_at ? `<small class="text-muted">Saved ${escapeHtml(String(trip.created_at).slice(0, 10))}</small>` : ""}
+        </div>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-delete-itinerary="${escapeHtml(trip.id)}">Delete</button>
+      </article>
+    `).join("");
   } catch (error) {
     container.innerHTML = `<div class="saved-empty"><h3>Could not load saved trips</h3><p>${escapeHtml(error.message)}</p></div>`;
   }
 }
 
-async function viewSavedItinerary(id) {
-  try {
-    const data = await api(`/api/itineraries/${id}`);
-    const target = byId("itinerary");
-    const days = Array.isArray(data.itinerary) ? data.itinerary : [];
-  target.innerHTML = `<div class="itinerary-intro"><div class="itinerary-intro-main"><p class="eyebrow accent">SAVED ITINERARY</p><h2>${escapeHtml(data.destination)} · ${data.days} days</h2><p class="text-muted mb-0">Trip budget: <strong>${money(data.budget)}</strong></p></div><div class="trip-estimate"><span>ESTIMATED TRIP TOTAL</span><strong>${money(days.reduce((sum, day) => sum + Number(day.estimated_day_cost_inr || 0), 0))}</strong></div></div>${days.map(day => `<article class="trip-day"><div class="day-header"><div><span>DAY ${day.day}</span><h3>${escapeHtml(day.day_title || day.theme || `Day ${day.day}`)}</h3></div><strong>${money(day.estimated_day_cost_inr)}<small>day estimate</small></strong></div>${Array.isArray(day.schedule) ? renderDaySchedule(day) : (day.guide_sections || []).map(renderGuideSection).join("")}${Array.isArray(day.activities) && !day.guide_sections ? `<div class="saved-activities">${day.activities.map(a => `<span>${escapeHtml(typeof a === "string" ? a : (a.title || a.name || a.activity || "Activity"))}</span>`).join("")}</div>` : ""}</article>`).join("")}`;
-    byId("planner")?.scrollIntoView({ behavior: "smooth" });
-  } catch (error) { alert(error.message); }
-}
+document.addEventListener("click", async event => {
+  const saveButton = event.target.closest("#saveItineraryButton");
+  if (saveButton) {
+    if (!getToken()) {
+      bootstrap.Modal.getOrCreateInstance(byId("loginModal")).show();
+      return;
+    }
+    const original = saveButton.innerHTML;
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+    try {
+      await api("/api/itineraries", {
+        method: "POST",
+        body: JSON.stringify({
+          destination: byId("destination").value.trim(),
+          days: Number(byId("days").value),
+          budget: Number(byId("budget").value),
+          interests: byId("interests").value.split(",").map(item => item.trim()).filter(Boolean)
+        })
+      });
+      saveButton.textContent = "Saved ✓";
+      await loadSavedItineraries();
+    } catch (error) {
+      alert(error.message);
+      saveButton.innerHTML = original;
+    } finally {
+      saveButton.disabled = false;
+    }
+    return;
+  }
 
-async function deleteSavedItinerary(id) {
-  if (!confirm("Delete this saved itinerary?")) return;
-  try {
-    await api(`/api/itineraries/${id}`, { method: "DELETE" });
-    await loadSavedItineraries();
-  } catch (error) { alert(error.message); }
-}
+  const deleteButton = event.target.closest("[data-delete-itinerary]");
+  if (deleteButton) {
+    const id = deleteButton.dataset.deleteItinerary;
+    if (!id || !confirm("Delete this saved itinerary?")) return;
+    deleteButton.disabled = true;
+    try {
+      await api(`/api/itineraries/${encodeURIComponent(id)}`, { method: "DELETE" });
+      await loadSavedItineraries();
+    } catch (error) {
+      alert(error.message);
+      deleteButton.disabled = false;
+    }
+  }
+});
 
 const uploadStatus = byId("uploadStatus");
 

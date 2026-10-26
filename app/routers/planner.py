@@ -172,6 +172,99 @@ CURATED_DESTINATION_PLACES = {
             ("Mangaladevi Temple", "Temple", {"amenity": "place_of_worship", "religion": "hindu"}),
         ],
     },
+    "mysuru": {
+        "sightseeing": [
+            ("Mysuru Palace", "Palace", {"tourism": "attraction", "historic": "palace"}),
+            ("Chamundi Hill", "Scenic viewpoint", {"tourism": "viewpoint"}),
+            ("Brindavan Gardens", "Garden", {"leisure": "garden"}),
+            ("St. Philomena's Cathedral", "Historic landmark", {"tourism": "attraction"}),
+            ("Jaganmohan Palace Art Gallery", "Museum", {"tourism": "museum"}),
+            ("Karanji Lake", "Nature", {"natural": "water"}),
+        ],
+        "culture": [
+            ("Mysuru Palace", "Palace", {"tourism": "attraction", "historic": "palace"}),
+            ("Jaganmohan Palace Art Gallery", "Museum", {"tourism": "museum"}),
+            ("St. Philomena's Cathedral", "Historic landmark", {"tourism": "attraction"}),
+        ],
+        "temples": [
+            ("Chamundeshwari Temple", "Temple", {"amenity": "place_of_worship", "religion": "hindu"}),
+            ("Nanjangud Srikanteshwara Temple", "Temple", {"amenity": "place_of_worship", "religion": "hindu"}),
+        ],
+        "nature": [
+            ("Brindavan Gardens", "Garden", {"leisure": "garden"}),
+            ("Karanji Lake", "Nature", {"natural": "water"}),
+        ],
+        "history": [
+            ("Mysuru Palace", "Palace", {"tourism": "attraction", "historic": "palace"}),
+            ("Jaganmohan Palace Art Gallery", "Museum", {"tourism": "museum"}),
+        ],
+    },
+    "kochi": {
+        "sightseeing": [
+            ("Fort Kochi", "Heritage district", {"tourism": "attraction", "historic": "heritage"}),
+            ("Chinese Fishing Nets", "Landmark", {"tourism": "attraction"}),
+            ("Mattancherry Palace", "Palace", {"tourism": "museum", "historic": "palace"}),
+            ("Jew Town", "Heritage district", {"tourism": "attraction"}),
+            ("Kerala Folklore Museum", "Museum", {"tourism": "museum"}),
+            ("Marine Drive Kochi", "Waterfront", {"tourism": "attraction"}),
+        ],
+        "culture": [
+            ("Mattancherry Palace", "Palace", {"tourism": "museum", "historic": "palace"}),
+            ("Paradesi Synagogue", "Historic landmark", {"tourism": "attraction", "historic": "building"}),
+            ("Kerala Folklore Museum", "Museum", {"tourism": "museum"}),
+        ],
+        "history": [
+            ("Fort Kochi", "Heritage district", {"tourism": "attraction", "historic": "heritage"}),
+            ("Mattancherry Palace", "Palace", {"tourism": "museum", "historic": "palace"}),
+            ("Paradesi Synagogue", "Historic landmark", {"tourism": "attraction", "historic": "building"}),
+        ],
+        "nature": [
+            ("Mangalavanam Bird Sanctuary", "Nature reserve", {"leisure": "nature_reserve"}),
+            ("Marine Drive Kochi", "Waterfront", {"tourism": "attraction"}),
+        ],
+        "food": [
+            ("Fort Kochi local food walk", "Food experience", {"tourism": "attraction"}),
+        ],
+    },
+    "goa": {
+        "sightseeing": [
+            ("Basilica of Bom Jesus", "Historic landmark", {"tourism": "attraction", "historic": "church"}),
+            ("Fort Aguada", "Fort", {"historic": "fort", "tourism": "attraction"}),
+            ("Fontainhas Latin Quarter", "Heritage district", {"tourism": "attraction"}),
+            ("Dona Paula View Point", "Viewpoint", {"tourism": "viewpoint"}),
+        ],
+        "culture": [
+            ("Basilica of Bom Jesus", "Historic landmark", {"tourism": "attraction", "historic": "church"}),
+            ("Fontainhas Latin Quarter", "Heritage district", {"tourism": "attraction"}),
+        ],
+        "beaches": [
+            ("Miramar Beach", "Beach", {"natural": "beach"}),
+            ("Calangute Beach", "Beach", {"natural": "beach"}),
+            ("Colva Beach", "Beach", {"natural": "beach"}),
+        ],
+        "nature": [
+            ("Dona Paula View Point", "Viewpoint", {"tourism": "viewpoint"}),
+        ],
+    },
+    "chennai": {
+        "sightseeing": [
+            ("Marina Beach", "Beach", {"natural": "beach"}),
+            ("Fort St. George", "Historic fort", {"historic": "fort", "tourism": "attraction"}),
+            ("Government Museum Chennai", "Museum", {"tourism": "museum"}),
+            ("Kapaleeshwarar Temple", "Temple", {"amenity": "place_of_worship", "religion": "hindu"}),
+        ],
+        "culture": [
+            ("Government Museum Chennai", "Museum", {"tourism": "museum"}),
+            ("Fort St. George", "Historic fort", {"historic": "fort", "tourism": "attraction"}),
+        ],
+        "temples": [
+            ("Kapaleeshwarar Temple", "Temple", {"amenity": "place_of_worship", "religion": "hindu"}),
+        ],
+        "beaches": [
+            ("Marina Beach", "Beach", {"natural": "beach"}),
+            ("Elliot's Beach", "Beach", {"natural": "beach"}),
+        ],
+    },
 }
 
 # Approximate coordinates for curated landmarks. They let daily grouping and
@@ -211,6 +304,35 @@ CURATED_PLACE_COORDINATES = {
     "Kudroli Gokarnath Temple": (12.8808, 74.8335),
     "Kadri Manjunath Temple": (12.8915, 74.8631),
     "Mangaladevi Temple": (12.8610, 74.8445),
+    "Mysuru Palace": (12.3052, 76.6552),
+    "Chamundi Hill": (12.2720, 76.6700),
+    "Brindavan Gardens": (12.4210, 76.5720),
+    "St. Philomena's Cathedral": (12.3250, 76.6550),
+    "Jaganmohan Palace Art Gallery": (12.3030, 76.6530),
+    "Karanji Lake": (12.3020, 76.6740),
+    "Chamundeshwari Temple": (12.2720, 76.6700),
+    "Nanjangud Srikanteshwara Temple": (12.1180, 76.6830),
+    "Fort Kochi": (9.9650, 76.2420),
+    "Chinese Fishing Nets": (9.9655, 76.2425),
+    "Mattancherry Palace": (9.9570, 76.2590),
+    "Jew Town": (9.9575, 76.2595),
+    "Kerala Folklore Museum": (9.9310, 76.3000),
+    "Marine Drive Kochi": (9.9810, 76.2760),
+    "Paradesi Synagogue": (9.9580, 76.2590),
+    "Mangalavanam Bird Sanctuary": (9.9880, 76.2770),
+    "Fort Kochi local food walk": (9.9650, 76.2420),
+    "Basilica of Bom Jesus": (15.5009, 73.9110),
+    "Fort Aguada": (15.4920, 73.7730),
+    "Fontainhas Latin Quarter": (15.4980, 73.8300),
+    "Dona Paula View Point": (15.4580, 73.8050),
+    "Miramar Beach": (15.4770, 73.8070),
+    "Calangute Beach": (15.5440, 73.7550),
+    "Colva Beach": (15.2790, 73.9220),
+    "Marina Beach": (13.0500, 80.2820),
+    "Fort St. George": (13.0800, 80.2870),
+    "Government Museum Chennai": (13.0700, 80.2570),
+    "Kapaleeshwarar Temple": (13.0330, 80.2700),
+    "Elliot's Beach": (12.9990, 80.2700),
 }
 
 
@@ -268,8 +390,8 @@ INTEREST_TAGS = {
 
 
 def _normalise_interest(interest: str) -> str:
-    """Normalise user interest names and common aliases."""
-    value = interest.strip().lower()
+    """Normalise user interest names, punctuation, and common aliases."""
+    value = re.sub(r"[.,;:!?]+$", "", interest.strip().lower()).strip()
     aliases = {
         "beach": "beaches", "sea": "beaches", "water": "beaches",
         "restaurants": "food", "restaurant": "food", "cuisine": "food",
@@ -293,6 +415,9 @@ def _destination_guide_key(destination: str) -> str:
         "pondicherry": "puducherry", "pondy": "puducherry",
         "bangalore": "bengaluru", "bengaluru, india": "bengaluru",
         "mangalore": "mangaluru", "mangaluru, india": "mangaluru",
+        "mysore": "mysuru", "mysuru, karnataka": "mysuru",
+        "cochin": "kochi", "kochi, kerala": "kochi",
+        "goa, india": "goa", "chennai, tamil nadu": "chennai",
     }
     return aliases.get(key, key)
 
@@ -434,7 +559,7 @@ def _osm_secondary_places(destination: str, interest: str) -> list[dict]:
 
 
 def _geocode_destination(destination: str) -> dict | None:
-    """Resolve the user's destination to the most likely settlement."""
+    """Resolve a destination quickly, using known city centres when available."""
     raw = destination.strip()
     if not raw:
         return None
@@ -445,8 +570,33 @@ def _geocode_destination(destination: str) -> dict | None:
         "mysore": "Mysuru",
         "bangalore": "Bengaluru",
         "mangalore": "Mangaluru",
+        "cochin": "Kochi",
+        "kochi, kerala": "Kochi",
+        "mysuru, karnataka": "Mysuru",
+        "goa, india": "Goa",
+        "chennai, tamil nadu": "Chennai",
     }
     preferred_name = aliases.get(raw.lower(), raw)
+    city_centres = {
+        "mysuru": (12.2958, 76.6394),
+        "kochi": (9.9312, 76.2673),
+        "bengaluru": (12.9716, 77.5946),
+        "mangaluru": (12.9141, 74.8560),
+        "puducherry": (11.9416, 79.8083),
+        "goa": (15.2993, 74.1240),
+        "chennai": (13.0827, 80.2707),
+    }
+    local_key = _destination_guide_key(preferred_name)
+    if local_key in city_centres:
+        lat, lon = city_centres[local_key]
+        return {
+            "display_name": f"{preferred_name}, India",
+            "latitude": lat,
+            "longitude": lon,
+            "matched_name": preferred_name,
+            "place_type": "city",
+            "source": "local city-centre reference",
+        }
 
     # One focused India query keeps the planner responsive. The previous
     # three sequential geocoder searches could consume 36 seconds before
@@ -2385,9 +2535,18 @@ def generate_personalized_itinerary(
     interest_order = {item: index for index, item in enumerate(activity_interests)}
     activity_interests.sort(key=lambda item: (item != "temples", interest_order[item]))
 
+    curated_places = _curated_places_for_destination(destination)
+    curated_covers_interests = bool(curated_places) and all(
+        any(_interest_matches_place(interest, place) > 0 for place in curated_places)
+        for interest in activity_interests
+    )
     places = []
 
-    if location:
+    # For destinations with a named guide that covers the requested interests,
+    # use that deterministic local dataset directly. This avoids waiting on
+    # geocoding/Overpass only to receive no results, while preserving live
+    # provider retrieval for unknown destinations or uncovered interests.
+    if location and not curated_covers_interests:
         places = _get_places(
             latitude=location["latitude"],
             longitude=location["longitude"],
@@ -2395,10 +2554,9 @@ def generate_personalized_itinerary(
             destination=destination,
         )
 
-    curated_places = _curated_places_for_destination(destination)
     if curated_places:
-        # Keep live results, but add dependable named places for covered
-        # destinations so the final plan never falls back to generic labels.
+        # Curated entries are named recommendations, not live availability.
+        # Merge them with provider results when live retrieval was needed.
         places = curated_places + places
 
     destination_lat = location["latitude"] if location else None
@@ -2515,7 +2673,9 @@ def generate_personalized_itinerary(
             ),
         },
         "data_source": (
-            "Geoapify + interest-aware recommendation + geographic grouping + constraint-based daily scheduling"
+            "Curated destination guide + interest-aware recommendation + geographic grouping + constraint-based scheduling"
+            if curated_covers_interests and not any(place.get("source") == "Geoapify" for place in places)
+            else "Geoapify + interest-aware recommendation + geographic grouping + constraint-based daily scheduling"
             if any(place.get("source") == "Geoapify" for place in places) and not curated_places
             else "Geoapify + curated local recommendations + OpenStreetMap fallback + constraint-based daily scheduling"
             if any(place.get("source") == "Geoapify" for place in places) and curated_places
